@@ -1,0 +1,55 @@
+name: Reporte de error
+description: Informa un problema de instalación o funcionamiento
+title: "[Error]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: Gracias por ayudarnos a mejorar Matemáticas Aventura.
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Plataforma
+      options:
+        - Windows
+        - Android
+        - Navegador
+        - Otra
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versión del programa
+      placeholder: Ejemplo: 1.0.0
+  - type: textarea
+    id: problem
+    attributes:
+      label: ¿Qué ocurrió?
+      description: Describe el mensaje y la pantalla donde apareció.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Pasos para reproducirlo
+      placeholder: |
+        1. Abrí...
+        2. Pulsé...
+        3. Apareció...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Resultado esperado
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacidad
+      options:
+        - label: Confirmo que no adjunté contraseñas, claves ni datos personales de estudiantes.
+          required: true
