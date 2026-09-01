@@ -1,0 +1,52 @@
+# Sistema operativo
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Variables y secretos
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.keystore
+*.jks
+
+# Registros y temporales
+*.log
+tmp/
+temp/
+.cache/
+
+# Go
+bin/
+vendor/
+coverage.out
+*.test
+
+# Node y aplicaciones web
+node_modules/
+dist/
+build/
+.next/
+coverage/
+
+# Android
+.gradle/
+local.properties
+**/build/
+*.apk
+*.aab
+
+# Windows
+*.exe
+*.msi
+
+# Archivos grandes generados
+releases/
