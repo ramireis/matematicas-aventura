@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Misión Matemática ABJ Animada</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#31548a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Misión Matemática">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+ --azul:#31548a; --cel:#eaf4ff; --verde:#67b66f; --amar:#ffd34f;
+ --naranja:#f39a3e; --morado:#8e6ac8; --rojo:#df6262; --osc:#26364f;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;font-family:Segoe UI,Arial,sans-serif;color:var(--osc);
+ background:linear-gradient(180deg,#dff2ff 0%,#f8fbff 65%,#eaf8ea 100%);
+ min-height:100vh;overflow-x:hidden;
+}
+header{
+ background:linear-gradient(90deg,#31548a,#4c7bc5);
+ color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;
+ box-shadow:0 5px 18px #0002;position:sticky;top:0;z-index:5
+}
+header h1{margin:0;font-size:27px}
+.badges{display:flex;gap:10px}.badge{background:#fff;color:#31548a;padding:8px 12px;border-radius:18px;font-weight:800}
+main{max-width:1100px;margin:auto;padding:22px}
+.card{
+ background:#fff;border-radius:24px;padding:22px;box-shadow:0 10px 28px #0001;margin-bottom:18px;
+ animation:pop .45s ease both;
+}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+button{
+ border:0;border-radius:16px;padding:15px;font-size:16px;font-weight:800;cursor:pointer;color:#fff;background:var(--azul);
+ box-shadow:0 5px 0 #213f6a;transition:.15s transform,.15s filter;
+}
+button:hover{filter:brightness(1.08);transform:translateY(-2px)}
+button:active{transform:translateY(3px);box-shadow:0 2px 0 #213f6a}
+.green{background:var(--verde);box-shadow:0 5px 0 #3f8248}
+.orange{background:var(--naranja);box-shadow:0 5px 0 #b86a24}
+.purple{background:var(--morado);box-shadow:0 5px 0 #5c4587}
+.red{background:var(--rojo);box-shadow:0 5px 0 #a84242}
+input{width:100%;padding:13px;border:2px solid #bfd3ea;border-radius:12px;font-size:17px}
+.teacherBox{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;background:#f6fbff;border:2px solid #b9d6ef;border-radius:18px;padding:16px;margin-top:16px}.teacherBox img{width:180px;height:180px;background:#fff;padding:8px;border-radius:12px}.teacherUrl{word-break:break-all;font-size:13px;color:#53677d}.statusNet{font-weight:800}.statusOn{color:#2e8b57}.statusOff{color:#c84b4b}@media(max-width:680px){.teacherBox{grid-template-columns:1fr}.teacherBox img{justify-self:center}}
+.hidden{display:none!important}
+.progress{height:20px;background:#e5ebf3;border-radius:14px;overflow:hidden}
+.bar{height:100%;background:linear-gradient(90deg,#ffd34f,#ff9a3e);width:0;transition:width .5s}
+#feedback{font-size:18px;font-weight:800;margin-top:15px;min-height:30px}
+.ok{color:#2e8b57}.bad{color:#c84b4b}
+.mission{
+ min-height:155px;position:relative;overflow:hidden
+}
+.mission small{display:block;margin-top:6px;font-weight:500}
+.icon{
+ font-size:38px;display:block;margin-bottom:8px;animation:float 2.2s ease-in-out infinite
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.hero{display:flex;gap:20px;align-items:center}
+.robot{
+ width:125px;height:125px;border-radius:50%;background:#dff3ff;border:8px solid #4c97ff;
+ display:grid;place-items:center;font-size:58px;animation:bob 1.8s ease-in-out infinite;
+ box-shadow:inset 0 0 0 8px #fff,0 8px 18px #0002
+}
+@keyframes bob{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg) scale(1.03)}}
+.stars{position:fixed;inset:0;pointer-events:none;z-index:20}
+.star{
+ position:absolute;font-size:30px;animation:burst 1.2s ease-out forwards
+}
+@keyframes burst{
+ from{transform:translate(0,0) scale(.4) rotate(0);opacity:1}
+ to{transform:translate(var(--dx),var(--dy)) scale(1.5) rotate(220deg);opacity:0}
+}
+.shake{animation:shake .35s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-9px)}75%{transform:translateX(9px)}}
+.correctFlash{animation:goodflash .65s}
+@keyframes goodflash{0%,100%{background:#fff}50%{background:#dff8e3}}
+.questionBox{
+ background:#f6f9ff;border:2px dashed #9ebde4;border-radius:18px;padding:18px;font-size:20px;line-height:1.45
+}
+.choicegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+.choice{background:#5c7fb7;box-shadow:0 4px 0 #3c5e94}
+.medal{
+ display:inline-block;background:#fff3b7;border:3px solid #e3ba34;border-radius:20px;padding:7px 12px;font-weight:800;
+ animation:pulse 1.6s infinite
+}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.levelmap{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.leveldot{width:34px;height:34px;border-radius:50%;background:#dce5ef;display:grid;place-items:center;font-weight:800}
+.leveldot.done{background:#71c77a;color:#fff}
+.leveldot.now{background:#ffd34f;animation:pulse 1s infinite}
+.mobileTools{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.mobileHint{background:#eef8ff;border:2px solid #b9d6ef;border-radius:16px;padding:12px;margin-top:12px;font-size:14px}.installBtn{background:#2f7d59;box-shadow:0 5px 0 #20573e}.smallBtn{padding:10px 12px;font-size:14px}footer{text-align:center;padding:22px;color:#65758a}
+.comicHero{display:grid;grid-template-columns:minmax(180px,340px) 1fr;gap:18px;align-items:center;margin:10px 0 18px;background:linear-gradient(135deg,#fff7d5,#eef7ff);border:3px solid #26364f;border-radius:20px;overflow:hidden}.comicHero img{width:100%;height:220px;object-fit:cover;display:block}.speech{position:relative;background:#fff;border:3px solid #26364f;border-radius:18px;padding:16px 18px;font-weight:800;font-size:18px;margin-right:18px}.speech:before{content:"";position:absolute;left:-18px;top:42%;border-width:12px 18px 12px 0;border-style:solid;border-color:transparent #26364f transparent transparent}.speech:after{content:"";position:absolute;left:-12px;top:44%;border-width:9px 14px 9px 0;border-style:solid;border-color:transparent #fff transparent transparent}.motivaMini{display:grid;grid-template-columns:118px 1fr;gap:12px;align-items:center;margin:14px 0;padding:10px;background:#fff8df;border:2px solid #f0c94f;border-radius:16px}.motivaMini img{width:118px;height:100px;object-fit:cover;border-radius:12px}.motivaMini b{display:block;font-size:17px;margin-bottom:4px}.motivaMini p{margin:0;font-size:14px}.motivPulse{animation:motivPulse .55s ease}@keyframes motivPulse{0%{transform:scale(.96)}60%{transform:scale(1.025)}100%{transform:scale(1)}}@media(max-width:820px){.grid{grid-template-columns:1fr}.hero{flex-direction:column}.choicegrid{grid-template-columns:1fr}.comicHero{grid-template-columns:1fr}.comicHero img{height:190px}.speech{margin:0 12px 14px}.speech:before,.speech:after{display:none}.motivaMini{grid-template-columns:92px 1fr}.motivaMini img{width:92px;height:86px}}
+
+/* === ESTRUCTURA 2: AVENTURA GAMIFICADA === */
+.gameTop{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;background:linear-gradient(135deg,#102c55,#173f77);color:#fff;border-radius:22px;padding:14px 16px;margin-bottom:14px;border:3px solid #6ea7e8;box-shadow:0 10px 24px #16385c33}
+.playerMini{display:flex;align-items:center;gap:12px;min-width:0}.avatarMini{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#ffe26e,#ff9a3e);font-size:32px;border:3px solid #fff}.playerMini strong{font-size:18px}.rankTxt{font-size:13px;opacity:.9}.miniProgress{height:9px;background:#ffffff38;border-radius:8px;overflow:hidden;margin-top:5px;max-width:300px}.miniProgress>span{display:block;height:100%;background:linear-gradient(90deg,#59d977,#ffe24a);width:0;transition:width .4s}
+.wallet{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.walletChip{background:#081d38;border:2px solid #ffffff2b;border-radius:16px;padding:8px 10px;font-weight:900;white-space:nowrap}
+.adventureGrid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(250px,.7fr);gap:14px}.mapPanel{position:relative;background:linear-gradient(180deg,#7dd4ff 0%,#3b98cf 50%,#12659f 100%);border-radius:24px;padding:18px;overflow:hidden;min-height:510px;border:4px solid #173f77}.mapPanel:before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 15% 12%,#ffffff30 0 2px,transparent 3px),radial-gradient(circle at 80% 35%,#ffffff24 0 2px,transparent 3px);background-size:60px 60px,75px 75px;pointer-events:none}.mapHeader{position:relative;z-index:2;color:#fff;text-align:center;text-shadow:0 2px 3px #0007}.mapHeader h3{margin:0;font-size:24px}.mapHeader p{margin:4px 0 16px;font-size:13px}.islandMap{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,1fr);gap:18px 16px;align-items:center}.world{position:relative;border:0;min-height:138px;border-radius:48% 52% 45% 55% / 55% 45% 55% 45%;padding:16px 10px 13px;color:#fff;box-shadow:0 9px 0 #0d4167,0 13px 22px #06243e66;overflow:visible;transition:transform .18s,filter .18s;isolation:isolate}.world:before{content:"";position:absolute;inset:8px;border-radius:inherit;background:#ffffff16;border:2px solid #ffffff2e;z-index:-1}.world:hover{transform:translateY(-4px) scale(1.02)}.world .worldIcon{font-size:38px;display:block;filter:drop-shadow(0 3px 2px #0005);animation:float 2.3s ease-in-out infinite}.world .worldName{display:block;font-size:14px;line-height:1.1;margin-top:5px}.world .worldStars{display:block;font-size:13px;margin-top:5px;letter-spacing:1px}.world .worldPct{position:absolute;right:-5px;top:-8px;background:#fff;color:#173f77;border:3px solid #173f77;min-width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:900}.w1{background:linear-gradient(135deg,#67c768,#27994c)}.w2{background:linear-gradient(135deg,#479ff4,#3566d3)}.w3{background:linear-gradient(135deg,#b36fe7,#7741b8)}.w4{background:linear-gradient(135deg,#f3a947,#d26720)}.w5{background:linear-gradient(135deg,#e36a67,#b63452)}.w6{background:linear-gradient(135deg,#5ccbb9,#248e87)}
+.pathDot{position:absolute;width:12px;height:12px;background:#ffe25a;border:2px solid #7b5c00;border-radius:50%;box-shadow:0 0 0 2px #fff6}.path1{left:31%;top:34%}.path2{left:64%;top:34%}.path3{left:64%;top:66%}.path4{left:31%;top:66%}
+.sideQuest{display:grid;gap:12px}.questCard{background:#fff;border-radius:20px;padding:15px;border:3px solid #dbe7f4;box-shadow:0 7px 18px #173f7720}.questCard h3{margin:0 0 8px}.streakFlame{font-size:38px;animation:pulse 1.2s infinite}.chestBtn{width:100%;background:linear-gradient(135deg,#f6b52f,#d87c13);box-shadow:0 5px 0 #9a5208}.chestBtn.ready{animation:pulse 1s infinite}.dailyTask{background:linear-gradient(135deg,#fff4be,#fff);border-color:#f2cf50}.rewardRow{display:flex;justify-content:space-between;gap:8px;align-items:center;border-top:1px solid #e6edf5;padding-top:9px;margin-top:9px;font-size:14px}.navGame{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}.navGame button{padding:11px 14px;font-size:13px;background:#173f77;box-shadow:0 4px 0 #0c2748}.navGame .activeNav{background:#e9a628;box-shadow:0 4px 0 #9c6810}
+.rewardToast{position:fixed;left:50%;top:85px;transform:translateX(-50%) translateY(-25px);z-index:50;background:#132f57;color:#fff;border:3px solid #ffd34f;border-radius:18px;padding:12px 18px;font-weight:900;opacity:0;pointer-events:none;transition:.3s;box-shadow:0 10px 30px #0005}.rewardToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:820px){.gameTop{grid-template-columns:1fr}.wallet{justify-content:flex-start}.adventureGrid{grid-template-columns:1fr}.islandMap{grid-template-columns:repeat(2,1fr)}.mapPanel{min-height:auto}.pathDot{display:none}.world{min-height:128px}.questCard{padding:13px}}
+@media(max-width:430px){.islandMap{gap:14px 10px}.world{min-height:118px;padding:12px 7px}.world .worldIcon{font-size:32px}.world .worldName{font-size:12px}.walletChip{font-size:12px;padding:7px 8px}}
+
+</style>
+</head>
+<body>
+<header>
+ <h1>🎮 Misión Matemática ABJ Animada</h1>
+ <div class="badges"><div class="badge">⭐ XP: <span id="xp">0</span></div><div class="badge">🏅 <span id="medallas">0</span></div></div>
+</header>
+<div class="stars" id="stars"></div>
+
+<main>
+<section class="card" id="inicio">
+ <div class="comicHero"><img src="imagenes/bienvenida_manga.png" alt="Equipo de héroes matemáticos estilo cómic"><div class="speech">¡Tu misión comienza aquí! Cada ejercicio superado te acerca a convertirte en héroe de las matemáticas. ⚡📚</div></div>
+ <div class="hero">
+   <div class="robot">🤖</div>
+   <div>
+    <h2>¡Bienvenido a la aventura matemática!</h2>
+    <p>Ahora tienes <b>30 actividades</b>: 5 retos diferentes en cada una de las 6 misiones.</p>
+    <p>Las preguntas cambian automáticamente para que puedas practicar varias veces.</p>
+   </div>
+ </div>
+ <input id="nombre" placeholder="Escribe tu nombre"/>
+ <br><br><button class="green" onclick="comenzar()">🚀 Comenzar aventura</button>
+ <div class="mobileTools">
+  <button id="installApp" type="button" class="installBtn smallBtn hidden">📲 Instalar en este dispositivo</button>
+  <button type="button" class="purple smallBtn" onclick="mostrarAyudaMovil()">📱 Cómo usar en celular</button>
+ </div>
+ <div id="mobileHelp" class="mobileHint hidden"><b>Android:</b> abre esta página desde el QR y usa el menú del navegador → “Añadir a pantalla de inicio”. <b>iPhone/iPad:</b> abre en Safari → Compartir → “Añadir a pantalla de inicio”. Mantén el celular y el computador en la misma Wi‑Fi para enviar avances al docente.</div>
+</section>
+
+
+<section class="card hidden" id="panel">
+ <div class="gameTop">
+  <div class="playerMini"><div class="avatarMini">🧑‍🚀</div><div><strong id="saludo">¡Explorador matemático!</strong><div class="rankTxt">Rango: <span id="rankName">Aprendiz</span> · Nivel <span id="levelNum">1</span></div><div class="miniProgress"><span id="levelBar"></span></div></div></div>
+  <div class="wallet"><div class="walletChip">🪙 <span id="coins">0</span></div><div class="walletChip">⭐ <span id="xpTop">0</span> XP</div><div class="walletChip">🔥 <span id="streakTop">0</span></div></div>
+ </div>
+ <div class="adventureGrid">
+  <div class="mapPanel">
+   <div class="mapHeader"><h3>🗺️ Aventura Matemática</h3><p>Elige un mundo, completa sus 5 retos y conquista las 30 actividades.</p></div>
+   <span class="pathDot path1"></span><span class="pathDot path2"></span><span class="pathDot path3"></span><span class="pathDot path4"></span>
+   <div class="islandMap">
+    <button class="world w1" onclick="cargarMision(1)"><span class="worldPct" id="pct1">0%</span><span class="worldIcon">🛒</span><span class="worldName">Mercado proporcional</span><span class="worldStars" id="stars1">☆☆☆☆☆</span></button>
+    <button class="world w2" onclick="cargarMision(2)"><span class="worldPct" id="pct2">0%</span><span class="worldIcon">🎯</span><span class="worldName">Ruleta del porcentaje</span><span class="worldStars" id="stars2">☆☆☆☆☆</span></button>
+    <button class="world w3" onclick="cargarMision(3)"><span class="worldPct" id="pct3">0%</span><span class="worldIcon">🏗️</span><span class="worldName">Arquitectos del parque</span><span class="worldStars" id="stars3">☆☆☆☆☆</span></button>
+    <button class="world w4" onclick="cargarMision(4)"><span class="worldPct" id="pct4">0%</span><span class="worldIcon">🔐</span><span class="worldName">Escape de conversiones</span><span class="worldStars" id="stars4">☆☆☆☆☆</span></button>
+    <button class="world w5" onclick="cargarMision(5)"><span class="worldPct" id="pct5">0%</span><span class="worldIcon">📊</span><span class="worldName">Detectives de datos</span><span class="worldStars" id="stars5">☆☆☆☆☆</span></button>
+    <button class="world w6" onclick="cargarMision(6)"><span class="worldPct" id="pct6">0%</span><span class="worldIcon">📏</span><span class="worldName">Laboratorio de medidas</span><span class="worldStars" id="stars6">☆☆☆☆☆</span></button>
+   </div>
+  </div>
+  <aside class="sideQuest">
+   <div class="questCard dailyTask"><h3>⚡ Desafío diario</h3><p>Completa 3 respuestas correctas para ganar un bono.</p><div class="progress"><div id="dailyBar" class="bar"></div></div><div class="rewardRow"><span id="dailyTxt">0/3 correctas</span><b>🎁 +50 XP</b></div></div>
+   <div class="questCard"><h3><span class="streakFlame">🔥</span> Racha</h3><p><b id="streakLabel">0 respuestas correctas seguidas</b></p><small>Las rachas premian la constancia, no la velocidad.</small></div>
+   <div class="questCard"><h3>🎁 Cofre de misión</h3><p id="chestText">Completa un mundo para desbloquear una recompensa.</p><button id="chestBtn" class="chestBtn" type="button" onclick="abrirCofre()">🔒 Cofre bloqueado</button></div>
+   <div class="questCard"><h3>📈 Progreso total</h3><div class="progress"><div id="bar" class="bar"></div></div><p><b id="progTxt">0 de 30 actividades correctas</b></p><div id="globalDots" class="levelmap"></div></div>
+  </aside>
+ </div>
+ <div class="navGame"><button class="activeNav" type="button">🏠 Aventura</button><button type="button" onclick="alert('Las medallas se obtienen al completar cada grupo de 5 actividades.')">🏅 Medallas</button><button type="button" onclick="alert('Tu progreso se guarda en este dispositivo y se sincroniza cuando hay conexión.')">💾 Progreso</button><button type="button" onclick="document.getElementById('teacherTools').classList.toggle('hidden')">👩‍🏫 Docente</button></div>
+ <div id="teacherTools" class="teacherBox hidden">
+  <div><h3>👩‍🏫 Seguimiento docente por QR</h3><p>El programa registra avances, errores frecuentes y novedades. Conecta el computador y el dispositivo del docente a la misma red para consultar el panel.</p><p id="netStatus" class="statusNet statusOff">● Verificando conexión de red…</p><p class="teacherUrl" id="teacherUrl"></p>
+  <label for="serverBase"><b>Dirección del computador docente</b></label><input id="serverBase" placeholder="Ej.: http://192.168.1.20:8765" inputmode="url" autocomplete="off">
+  <div class="mobileTools"><button type="button" class="green smallBtn" onclick="guardarServidor()">🔗 Guardar y sincronizar</button><button type="button" class="orange smallBtn" onclick="forzarOffline()">📴 Trabajar sin conexión</button></div><p class="mobileHint">En modo sin conexión, tus avances quedan guardados en este celular. Cuando vuelvas a la misma Wi‑Fi del computador docente, pulsa <b>Guardar y sincronizar</b>.</p><button type="button" onclick="abrirPanelDocente()">📊 Abrir panel docente</button> <button type="button" class="red smallBtn" onclick="cerrarProgramaWindows()">⏻ Cerrar programa Windows</button><p id="studentUrl" class="teacherUrl"></p></div>
+  <div id="qrArea"><div style="width:180px;height:180px;display:grid;place-items:center;background:#fff;border-radius:12px">QR al conectarse</div></div>
+ </div>
+</section>
+<div id="rewardToast" class="rewardToast" aria-live="polite"></div>
+
+
+<section class="card hidden" id="reto">
+ <h2 id="tituloReto"></h2>
+ <div id="nivelInfo" class="medal"></div>
+ <div class="levelmap" id="dots"></div>
+ <div class="motivaMini" id="motivaBox"><img id="motivaImg" src="imagenes/reto_manga.png" alt="Personaje de cómic animando a resolver el reto"><div><b id="motivaTitulo">¡Puedes hacerlo!</b><p id="motivaTexto">Observa con calma, busca una estrategia y conquista este reto.</p></div></div>
+ <div class="questionBox"><p id="pregunta"></p></div>
+ <div id="entradaTexto">
+   <input id="respuesta" placeholder="Escribe tu respuesta"/>
+ </div>
+ <div id="opciones" class="choicegrid hidden"></div>
+ <br>
+ <button class="green" onclick="verificar()">✅ Verificar</button>
+ <button onclick="pista()">💡 Pista</button>
+ <button class="orange" onclick="otra()">🎲 Otra actividad</button>
+ <button class="red" onclick="volver()">↩ Volver</button>
+ <div id="feedback"></div>
+</section>
+
+<section class="card hidden" id="final">
+ <div class="comicHero"><img src="imagenes/exito_manga.png" alt="Celebración estilo cómic por superar los retos"><div class="speech">¡Misión cumplida! Tu esfuerzo, tus intentos y tus estrategias también son parte del aprendizaje. 🏆✨</div></div>
+ <div class="hero">
+  <div class="robot">🏆</div>
+  <div><h2>¡Maestro Matemático!</h2><p id="mensajeFinal"></p><button onclick="reiniciar()">🔄 Jugar otra vez</button></div>
+ </div>
+</section>
+</main>
+<footer>Observa • Piensa • Resuelve • Verifica • Explica</footer>
+
+<script src="qrcode-local.js"></script>
+<script>
+const banco={
+1:[
+ {q:"Si 4 cuadernos cuestan $6, ¿cuánto cuestan 10 cuadernos? Escribe solo el número.",a:["15","15.0","15,0"],p:"Halla el precio de 1 cuaderno: 6 ÷ 4. Luego multiplica por 10."},
+ {q:"3 jugos cuestan $2,25. ¿Cuánto cuestan 8 jugos?",a:["6","6.0","6,0"],p:"Precio unitario: 2,25 ÷ 3 = 0,75. Luego 0,75 × 8."},
+ {q:"Una factura registra 5 panes a $0,40 cada uno. ¿Cuál es el subtotal?",a:["2","2.0","2,0"],p:"Multiplica cantidad × precio unitario."},
+ {q:"Si 2 entradas cuestan $7, ¿cuánto costarán 6 entradas?",a:["21"],p:"De 2 a 6 multiplicamos por 3. Haz lo mismo con el precio."},
+ {q:"12 lápices cuestan $9. ¿Cuánto cuesta 1 lápiz?",a:["0.75","0,75"],p:"Divide el precio total para la cantidad: 9 ÷ 12."}
+],
+2:[
+ {q:"Convierte 25% a decimal.",a:["0.25","0,25"],p:"Divide 25 para 100."},
+ {q:"¿Qué fracción simplificada representa 50%? Escribe 1/2.",a:["1/2"],p:"50/100 se simplifica dividiendo para 50."},
+ {q:"¿Qué porcentaje representa la fracción 3/4?",a:["75","75%"],p:"3 ÷ 4 = 0,75; luego multiplica por 100."},
+ {q:"Convierte 0,2 a porcentaje.",a:["20","20%"],p:"Multiplica el decimal por 100."},
+ {q:"Un círculo tiene 100 partes y 40 están coloreadas. ¿Qué porcentaje está coloreado?",a:["40","40%"],p:"40 de 100 significa 40%."}
+],
+3:[
+ {q:"Un rectángulo mide 8 m por 5 m. ¿Cuál es su área?",a:["40"],p:"Área = base × altura."},
+ {q:"Un cuadrado tiene lado de 7 cm. ¿Cuál es su perímetro?",a:["28"],p:"Perímetro del cuadrado = 4 × lado."},
+ {q:"Un triángulo tiene base 10 cm y altura 6 cm. ¿Cuál es su área?",a:["30"],p:"Área = base × altura ÷ 2."},
+ {q:"Un círculo tiene radio 5 cm. Usa π=3,14. ¿Cuál es su área? Redondea a dos decimales.",a:["78.5","78,5","78.50","78,50"],p:"Área = π × r² = 3,14 × 25."},
+ {q:"Un rectángulo mide 9 m por 4 m. ¿Cuál es su perímetro?",a:["26"],p:"Perímetro = 2 × (largo + ancho)."}
+],
+4:[
+ {q:"Convierte 2,5 km a metros.",a:["2500","2.500"],p:"Multiplica por 1000."},
+ {q:"Convierte 3500 g a kilogramos.",a:["3.5","3,5"],p:"Divide para 1000."},
+ {q:"Convierte 4 L a mililitros.",a:["4000","4.000"],p:"1 L = 1000 mL."},
+ {q:"Convierte 180 minutos a horas.",a:["3"],p:"Divide los minutos para 60."},
+ {q:"Convierte 250 cm a metros.",a:["2.5","2,5"],p:"Divide para 100."}
+],
+5:[
+ {q:"Datos: 2, 3, 3, 4, 5, 3. ¿Cuál es la moda?",a:["3"],p:"Busca el valor que más se repite."},
+ {q:"Frecuencias: A=4, B=7, C=5. ¿Cuál categoría tiene mayor frecuencia?",a:["b"],p:"Compara los tres valores."},
+ {q:"Datos: 1,1,2,2,2,3,4. ¿Cuántas veces aparece el 2?",a:["3"],p:"Cuenta las apariciones del número 2."},
+ {q:"En una encuesta: fútbol 8, básquet 5, natación 3. ¿Cuál es la moda?",a:["fútbol","futbol"],p:"La moda es la categoría más elegida."},
+ {q:"Si una barra alcanza el valor 12 en un gráfico, ¿qué frecuencia representa?",a:["12"],p:"La altura de la barra indica la frecuencia."}
+],
+6:[
+ {q:"¿Qué instrumento usamos para medir un ángulo?",a:["transportador","el transportador"],p:"Es el instrumento semicircular graduado."},
+ {q:"¿Qué instrumento usarías para medir la masa de una manzana?",a:["balanza","una balanza"],p:"La masa se mide con una balanza."},
+ {q:"¿Qué unidad es más adecuada para medir la longitud de un lápiz: cm o km?",a:["cm","centímetros","centimetros"],p:"Un lápiz es pequeño; conviene usar centímetros."},
+ {q:"¿Qué instrumento usarías para medir 500 mL de agua?",a:["vaso medidor","probeta","recipiente graduado"],p:"Necesitas un recipiente con graduación."},
+ {q:"¿Qué instrumento usarías para medir 30 segundos?",a:["cronómetro","cronometro","un cronómetro","un cronometro"],p:"El tiempo corto se mide con cronómetro."}
+]
+};
+const nombres={1:"🛒 Mercado proporcional",2:"🎯 Ruleta del porcentaje",3:"🏗️ Arquitectos del parque",4:"🔐 Escape de conversiones",5:"📊 Detectives de datos",6:"📏 Laboratorio de medidas"};
+let jugador="",xp=0,medallas=0,mision=0,indice=0,acertadas=new Set(),historial=[],novedades=[],pistasUsadas=0,studentId="",teacherUrl="";
+let racha=0,mejorRacha=0,correctasSesion=0,bonoDiario=false,cofresAbiertos=new Set();
+
+function idAct(){return mision+"-"+indice}
+function comenzar(){
+ jugador=document.getElementById("nombre").value.trim()||"Explorador";
+ studentId=(jugador.toLowerCase().replace(/[^a-z0-9áéíóúñ]+/gi,"-")+"-"+new Date().toISOString().slice(0,10));
+ restaurar();
+ document.getElementById("inicio").classList.add("hidden");
+ document.getElementById("panel").classList.remove("hidden");
+ document.getElementById("saludo").textContent=`Hola, ${jugador}`;
+ dibujarGlobal();actualizar();configurarRed();sincronizar();
+}
+function cargarMision(n){mision=n; indice=Math.floor(Math.random()*5); mostrarReto()}
+function mostrarReto(){
+ document.getElementById("panel").classList.add("hidden");document.getElementById("reto").classList.remove("hidden");
+ motivar("reto");
+ document.getElementById("tituloReto").textContent=nombres[mision];
+ document.getElementById("nivelInfo").textContent=`Actividad ${indice+1} de 5`;
+ document.getElementById("pregunta").textContent=banco[mision][indice].q;
+ document.getElementById("respuesta").value="";
+ document.getElementById("feedback").textContent="";
+ pistasUsadas=0;
+ dibujarDots();
+}
+function norm(x){return x.trim().toLowerCase()}
+function verificar(){
+ let box=document.getElementById("reto"), f=document.getElementById("feedback");
+ let raw=document.getElementById("respuesta").value, r=norm(raw), ok=banco[mision][indice].a.map(norm).includes(r);
+ historial.push({fecha:new Date().toISOString(),mision,indice,respuesta:raw,correcto:ok,pistas:pistasUsadas});
+ if(ok){
+   if(!acertadas.has(idAct())){acertadas.add(idAct());xp+=100;novedades.push(`${new Date().toLocaleString()}: completó ${nombres[mision]}, actividad ${indice+1}.`)}
+   racha++; mejorRacha=Math.max(mejorRacha,racha); correctasSesion++;
+   if(correctasSesion>=3 && !bonoDiario){bonoDiario=true;xp+=50;mostrarRecompensa("⚡ ¡Desafío diario! +50 XP");}
+   medallas=Math.floor(acertadas.size/5);
+   f.className="ok";f.textContent="✅ ¡Excelente! +100 XP. Explica ahora cómo lo pensaste.";motivar("exito");
+   box.classList.add("correctFlash"); setTimeout(()=>box.classList.remove("correctFlash"),700);
+   estrellas();
+   actualizar();guardar();sincronizar();
+   if(acertadas.size===30){setTimeout(finalizar,900)}
+ }else{
+   racha=0;f.className="bad";f.textContent="❌ Aún no. Usa la pista, revisa tu estrategia y vuelve a intentarlo.";motivar("intento");
+   let recientes=historial.filter(x=>!x.correcto&&x.mision===mision&&x.indice===indice).length;
+   if(recientes===2||recientes===4)novedades.push(`${new Date().toLocaleString()}: dificultad reiterada en ${nombres[mision]}, actividad ${indice+1} (${recientes} errores).`);
+   box.classList.add("shake");setTimeout(()=>box.classList.remove("shake"),400);guardar();sincronizar();
+ }
+}
+function pista(){pistasUsadas++;let f=document.getElementById("feedback");f.className="";f.textContent="💡 "+banco[mision][indice].p;motivar("pista") }
+
+function motivar(tipo){
+ const box=document.getElementById("motivaBox"),img=document.getElementById("motivaImg"),tit=document.getElementById("motivaTitulo"),txt=document.getElementById("motivaTexto");
+ if(!box||!img||!tit||!txt)return;
+ const mensajes={
+  reto:["imagenes/reto_manga.png","¡Acepta el desafío!","Lee dos veces, identifica los datos y prueba una estrategia. Cada intento cuenta."],
+  pista:["imagenes/ayuda_manga.png","¡Una pista es una herramienta!","Usar ayuda no es rendirse: observa el procedimiento y luego intenta explicarlo con tus palabras."],
+  intento:["imagenes/ayuda_manga.png","¡Los héroes también se equivocan!","Revisa un paso, cambia de estrategia y vuelve a intentarlo. Tu cerebro está entrenando."],
+  exito:["imagenes/exito_manga.png","¡Golpe matemático perfecto!","¡Lo lograste! Ahora explica cómo llegaste a la respuesta para fortalecer tu aprendizaje."]
+ };
+ const m=mensajes[tipo]||mensajes.reto;img.src=m[0];tit.textContent=m[1];txt.textContent=m[2];box.classList.remove("motivPulse");void box.offsetWidth;box.classList.add("motivPulse");
+}
+function otra(){indice=(indice+1)%5;mostrarReto()}
+function volver(){document.getElementById("reto").classList.add("hidden");document.getElementById("panel").classList.remove("hidden");dibujarGlobal()}
+function actualizar(){
+ document.getElementById("xp").textContent=xp;document.getElementById("medallas").textContent=medallas;
+ let prog=Math.round(acertadas.size/30*100),nivel=Math.floor(xp/500)+1,nivelPct=(xp%500)/5;
+ let rank=nivel>=6?"Héroe matemático":nivel>=4?"Estratega":nivel>=2?"Explorador":"Aprendiz";
+ const set=(id,v)=>{let e=document.getElementById(id);if(e)e.textContent=v};
+ set("xpTop",xp);set("coins",Math.floor(xp/10));set("streakTop",racha);set("streakLabel",`${racha} respuestas correctas seguidas`);set("levelNum",nivel);set("rankName",rank);
+ let lb=document.getElementById("levelBar");if(lb)lb.style.width=nivelPct+"%";
+ set("progTxt",`${acertadas.size} de 30 actividades correctas`);let b=document.getElementById("bar");if(b)b.style.width=prog+"%";
+ let db=document.getElementById("dailyBar");if(db)db.style.width=Math.min(correctasSesion,3)/3*100+"%";set("dailyTxt",`${Math.min(correctasSesion,3)}/3 correctas`);
+ for(let m=1;m<=6;m++){let n=[...acertadas].filter(x=>x.startsWith(m+"-")).length;set("pct"+m,(n*20)+"%");set("stars"+m,"★".repeat(n)+"☆".repeat(5-n));}
+ actualizarCofre();dibujarDots();dibujarGlobal();
+}
+function mostrarRecompensa(msg){let t=document.getElementById("rewardToast");if(!t)return;t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200);estrellas()}
+function mundoCompleto(m){return [...acertadas].filter(x=>x.startsWith(m+"-")).length===5}
+function cofreDisponible(){for(let m=1;m<=6;m++)if(mundoCompleto(m)&&!cofresAbiertos.has(m))return m;return 0}
+function actualizarCofre(){let m=cofreDisponible(),btn=document.getElementById("chestBtn"),txt=document.getElementById("chestText");if(!btn||!txt)return;if(m){btn.textContent="🎁 Abrir cofre del mundo "+m;btn.classList.add("ready");txt.textContent="¡Mundo completado! Tienes una recompensa lista."}else{btn.textContent="🔒 Cofre bloqueado";btn.classList.remove("ready");txt.textContent="Completa un mundo para desbloquear una recompensa."}}
+function abrirCofre(){let m=cofreDisponible();if(!m){mostrarRecompensa("🔒 Completa las 5 actividades de un mundo");return}cofresAbiertos.add(m);xp+=150;medallas=Math.max(medallas,cofresAbiertos.size);novedades.push(`${new Date().toLocaleString()}: abrió el cofre de ${nombres[m]} y ganó 150 XP.`);mostrarRecompensa("🎁 ¡Cofre abierto! +150 XP");actualizar();guardar();sincronizar()}
+function dibujarDots(){
+ let d=document.getElementById("dots");d.innerHTML="";
+ for(let i=0;i<5;i++){let x=document.createElement("div");x.className="leveldot "+(acertadas.has(mision+"-"+i)?"done":(i===indice?"now":""));x.textContent=i+1;d.appendChild(x)}
+}
+function dibujarGlobal(){
+ let d=document.getElementById("globalDots");d.innerHTML="";
+ for(let m=1;m<=6;m++){for(let i=0;i<5;i++){let x=document.createElement("div");x.className="leveldot "+(acertadas.has(m+"-"+i)?"done":"");x.textContent=acertadas.has(m+"-"+i)?"✓":"•";d.appendChild(x)}}
+}
+function estrellas(){
+ let root=document.getElementById("stars");
+ for(let i=0;i<14;i++){let s=document.createElement("div");s.className="star";s.textContent=["⭐","✨","🌟"][i%3];
+ s.style.left=(45+Math.random()*10)+"vw";s.style.top=(40+Math.random()*10)+"vh";
+ s.style.setProperty("--dx",(Math.random()*500-250)+"px");s.style.setProperty("--dy",(Math.random()*-350-50)+"px");
+ root.appendChild(s);setTimeout(()=>s.remove(),1300)}
+}
+
+function estadoActual(){return{id:studentId,jugador,xp,medallas,acertadas:[...acertadas],historial:historial.slice(-500),novedades:novedades.slice(-100),racha,mejorRacha,correctasSesion,bonoDiario,cofresAbiertos:[...cofresAbiertos],actualizado:new Date().toISOString()}}
+function guardar(){try{localStorage.setItem("mision-matematica-"+studentId,JSON.stringify(estadoActual()));encolarPendiente()}catch(e){}}
+function restaurar(){try{let x=JSON.parse(localStorage.getItem("mision-matematica-"+studentId)||"null");if(x){xp=x.xp||0;medallas=x.medallas||0;acertadas=new Set(x.acertadas||[]);historial=x.historial||[];novedades=x.novedades||[];racha=x.racha||0;mejorRacha=x.mejorRacha||0;correctasSesion=x.correctasSesion||0;bonoDiario=!!x.bonoDiario;cofresAbiertos=new Set(x.cofresAbiertos||[])}}catch(e){}}
+function getServerBase(){let saved=(localStorage.getItem("mm-server-base")||"").trim().replace(/\/$/,"");if(saved)return saved;if(location.protocol.startsWith("http"))return location.origin;return ""}
+function encolarPendiente(){try{if(!studentId)return;let q=JSON.parse(localStorage.getItem("mm-sync-queue")||"{}");q[studentId]=estadoActual();localStorage.setItem("mm-sync-queue",JSON.stringify(q))}catch(e){}}
+function marcarEstadoRed(ok,msg){let st=document.getElementById("netStatus");if(!st)return;st.textContent=(ok?"● ":"● ")+msg;st.className="statusNet "+(ok?"statusOn":"statusOff")}
+async function probarServidor(base){if(!base)return null;let r=await fetch(base+"/api/info",{method:"GET",cache:"no-store"});if(!r.ok)throw new Error("Servidor no disponible");return await r.json()}
+async function sincronizar(){encolarPendiente();let base=getServerBase();if(!base){marcarEstadoRed(false,"Modo sin conexión. Los avances están guardados en este celular.");return false}try{await probarServidor(base);let q=JSON.parse(localStorage.getItem("mm-sync-queue")||"{}");for(let k of Object.keys(q)){let r=await fetch(base+"/api/report",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(q[k])});if(!r.ok)throw new Error("Error al enviar");delete q[k]}localStorage.setItem("mm-sync-queue",JSON.stringify(q));marcarEstadoRed(true,"Conectado y sincronizado con el computador docente.");return true}catch(e){marcarEstadoRed(false,"Sin conexión con el computador docente. El progreso continúa guardado localmente.");return false}}
+function renderQR(el,text){
+ try{
+  if(!window.MMQRCode)throw new Error("QR no disponible");
+  let qr=new window.MMQRCode(0,(window.MM_QR_ECL&&window.MM_QR_ECL.M)||0);qr.addData(text);qr.make();
+  let n=qr.getModuleCount(),quiet=4,size=180,cell=Math.floor(size/(n+quiet*2)),real=cell*(n+quiet*2);
+  let c=document.createElement("canvas");c.width=real;c.height=real;c.style.width="180px";c.style.height="180px";c.style.background="#fff";c.setAttribute("aria-label","Código QR del panel docente");
+  let x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,real,real);x.fillStyle="#111";
+  for(let r=0;r<n;r++)for(let col=0;col<n;col++)if(qr.isDark(r,col))x.fillRect((col+quiet)*cell,(r+quiet)*cell,cell,cell);
+  el.innerHTML="";el.appendChild(c);
+ }catch(e){el.innerHTML='<div style="width:180px;height:180px;display:grid;place-items:center;background:#fff;border-radius:12px;text-align:center;padding:8px">QR no disponible.<br>Use la dirección mostrada.</div>'}
+}
+async function cerrarProgramaWindows(){try{await fetch('/api/shutdown',{method:'POST'})}catch(e){};document.body.innerHTML='<main style="font-family:Segoe UI,Arial;padding:40px;text-align:center"><h2>✅ Misión Matemática ABJ cerrada</h2><p>Ya puede cerrar esta pestaña.</p></main>'}
+async function configurarRed(){let u=document.getElementById("teacherUrl"),q=document.getElementById("qrArea"),inp=document.getElementById("serverBase"),su=document.getElementById("studentUrl");let base=getServerBase();if(inp)inp.value=base;if(!base){u.textContent="Modo offline activo";if(su)su.textContent="";q.innerHTML='<div style="width:180px;height:180px;display:grid;place-items:center;background:#fff;border-radius:12px;text-align:center;padding:8px">📴<br><b>Trabajo sin conexión</b><br>Los avances quedan en este equipo.</div>';marcarEstadoRed(false,"Modo sin conexión. Los avances están guardados en este equipo.");return}try{let info=await probarServidor(base);teacherUrl=info.teacherUrl||base+"/docente.html";u.textContent="Panel docente: "+teacherUrl;if(su)su.textContent="Celulares/estudiantes: "+(info.studentUrl||base+"/");marcarEstadoRed(true,"Red activa. El docente puede escanear el QR sin Internet, usando la misma Wi‑Fi/LAN.");renderQR(q,teacherUrl);await sincronizar()}catch(e){teacherUrl=base+"/docente.html";u.textContent=teacherUrl;if(su)su.textContent="";q.innerHTML='<div style="width:180px;height:180px;display:grid;place-items:center;background:#fff;border-radius:12px;text-align:center;padding:8px">📴<br><b>Servidor no disponible</b><br>Puede seguir trabajando offline.</div>';marcarEstadoRed(false,"Servidor docente no disponible. Trabajo offline activo.")}}
+async function guardarServidor(){let inp=document.getElementById("serverBase"),v=(inp.value||"").trim().replace(/\/$/,"");if(v && !/^https?:\/\//i.test(v))v="http://"+v;if(v)localStorage.setItem("mm-server-base",v);else localStorage.removeItem("mm-server-base");await configurarRed()}
+function forzarOffline(){localStorage.removeItem("mm-server-base");teacherUrl="";configurarRed()}
+function abrirPanelDocente(){let base=getServerBase();if(!base){alert("Estás trabajando sin conexión. Conecta el celular a la Wi‑Fi del computador docente y configura su dirección para abrir el panel.");return}window.open(teacherUrl||base+"/docente.html","_blank")}
+window.addEventListener("online",()=>{configurarRed()});window.addEventListener("offline",()=>{marcarEstadoRed(false,"El teléfono está sin red. El progreso seguirá guardándose localmente.")});setInterval(()=>{if(getServerBase())sincronizar()},15000);
+function finalizar(){
+ document.getElementById("reto").classList.add("hidden");document.getElementById("panel").classList.add("hidden");
+ document.getElementById("final").classList.remove("hidden");
+ document.getElementById("mensajeFinal").textContent=`${jugador}, completaste las 30 actividades, ganaste ${xp} XP y ${medallas} medallas.`;
+ estrellas();setTimeout(estrellas,500)
+}
+function reiniciar(){guardar();location.reload()}
+
+let deferredInstall=null;
+function mostrarAyudaMovil(){document.getElementById('mobileHelp').classList.toggle('hidden')}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;document.getElementById('installApp').classList.remove('hidden')});
+document.getElementById('installApp').addEventListener('click',async()=>{if(deferredInstall){deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;document.getElementById('installApp').classList.add('hidden')}else{mostrarAyudaMovil()}});
+if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost' || location.hostname==='127.0.0.1')){navigator.serviceWorker.register('/sw.js').catch(()=>{})}
+</script>
+</body>
+</html>
