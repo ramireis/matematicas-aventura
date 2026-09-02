@@ -1,0 +1,48 @@
+name: Compilar Matemáticas vs Zombis
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'math-zombie/**'
+      - '.github/workflows/build-math-zombie.yml'
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Preparar proyecto Android
+        working-directory: math-zombie
+        run: flutter create --platforms=android --project-name matematicas_vs_zombis .
+      - run: flutter pub get
+        working-directory: math-zombie
+      - run: flutter build apk --release
+        working-directory: math-zombie
+      - run: cp math-zombie/build/app/outputs/flutter-apk/app-release.apk Matematicas_vs_Zombis_Android.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Matematicas_vs_Zombis_Android
+          path: Matematicas_vs_Zombis_Android.apk
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Preparar proyecto Windows
+        working-directory: math-zombie
+        run: flutter create --platforms=windows --project-name matematicas_vs_zombis .
+      - run: flutter pub get
+        working-directory: math-zombie
+      - run: flutter build windows --release
+        working-directory: math-zombie
+      - name: Crear paquete portable
+        shell: pwsh
+        run: Compress-Archive -Path math-zombie/build/windows/x64/runner/Release/* -DestinationPath Matematicas_vs_Zombis_Windows_Portable.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Matematicas_vs_Zombis_Windows_Portable
+          path: Matematicas_vs_Zombis_Windows_Portable.zip
