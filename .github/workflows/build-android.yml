@@ -1,0 +1,36 @@
+name: Construir APK Matemáticas vs Zombis
+
+on:
+  push:
+    branches: ["nueva-construccion-zombis-apk"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Configurar Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.10.2"
+      - name: Compilar APK
+        working-directory: android_zombies
+        run: gradle :app:assembleDebug --stacktrace
+      - name: Renombrar APK
+        run: cp android_zombies/app/build/outputs/apk/debug/app-debug.apk Matematicas_vs_Zombis_EGB_Android.apk
+      - name: Publicar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Matematicas_vs_Zombis_EGB_Android
+          path: Matematicas_vs_Zombis_EGB_Android.apk
+          retention-days: 30
