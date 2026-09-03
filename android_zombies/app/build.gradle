@@ -2,12 +2,12 @@ plugins { id 'com.android.application' }
 
 android {
     namespace 'ec.edu.matematicas.zombis'
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId 'ec.edu.matematicas.zombis'
         minSdk 23
-        targetSdk 35
+        targetSdk 36
         versionCode 1
         versionName '1.0.0'
     }

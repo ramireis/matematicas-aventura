@@ -1,4 +1,4 @@
-name: Construir APK Matemáticas vs Zombis
+name: Construir AAB Play Store Matemáticas vs Zombis
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  build-apk:
+  build-aab:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar código
@@ -22,15 +22,15 @@ jobs:
       - name: Configurar Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: "8.10.2"
-      - name: Compilar APK
+          gradle-version: "8.13"
+      - name: Compilar AAB
         working-directory: android_zombies
-        run: gradle :app:assembleDebug --stacktrace
-      - name: Renombrar APK
-        run: cp android_zombies/app/build/outputs/apk/debug/app-debug.apk Matematicas_vs_Zombis_EGB_Android.apk
-      - name: Publicar APK
+        run: gradle :app:bundleRelease --stacktrace
+      - name: Preparar AAB
+        run: cp android_zombies/app/build/outputs/bundle/release/app-release.aab Matematicas_vs_Zombis_EGB_sin_firma.aab
+      - name: Publicar AAB para firma segura
         uses: actions/upload-artifact@v4
         with:
-          name: Matematicas_vs_Zombis_EGB_Android
-          path: Matematicas_vs_Zombis_EGB_Android.apk
+          name: Matematicas_vs_Zombis_EGB_AAB_sin_firma
+          path: Matematicas_vs_Zombis_EGB_sin_firma.aab
           retention-days: 30
