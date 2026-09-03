@@ -34,3 +34,26 @@ jobs:
           name: Matematicas_vs_Zombis_EGB_AAB_sin_firma
           path: Matematicas_vs_Zombis_EGB_sin_firma.aab
           retention-days: 30
+
+  build-windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: windows_zombies
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Instalar dependencias
+        run: npm install
+      - name: Construir instalador y portable
+        run: npm run dist
+      - name: Publicar archivos de Windows
+        uses: actions/upload-artifact@v4
+        with:
+          name: Matematicas_vs_Zombis_EGB_Windows
+          path: windows_zombies/dist/*.exe
+          retention-days: 30

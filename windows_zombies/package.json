@@ -1,0 +1,40 @@
+{
+  "name": "matematicas-vs-zombis-egb",
+  "version": "1.0.0",
+  "description": "Juego educativo de matemáticas para séptimo y octavo EGB",
+  "main": "main.js",
+  "author": "Proyecto Educativo",
+  "license": "UNLICENSED",
+  "scripts": {
+    "dist": "electron-builder --win nsis portable"
+  },
+  "devDependencies": {
+    "electron": "37.2.4",
+    "electron-builder": "26.0.12"
+  },
+  "build": {
+    "appId": "ec.edu.matematicas.zombis",
+    "productName": "Matemáticas vs. Zombis",
+    "asar": true,
+    "files": [
+      "main.js",
+      "index.html",
+      "manifest.webmanifest",
+      "sw.js"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Matemáticas vs. Zombis"
+    },
+    "artifactName": "Matematicas_vs_Zombis_EGB_${version}_${arch}.${ext}"
+  }
+}
