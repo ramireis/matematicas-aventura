@@ -18,7 +18,12 @@ List<Q> buildBank(){
  for(var i=1;i<=4;i++){final base=4+i*2,height=3+i,area=base*height~/2;list.add(Q('Geometría','Reto '+i.toString()+': área de un triángulo de base '+base.toString()+' cm y altura '+height.toString()+' cm.',[''+area.toString()+' cm²',''+(base*height).toString()+' cm²',''+(base+height).toString()+' cm²',''+(area+2).toString()+' cm²'],area.toString()+' cm²','Multiplica base por altura y divide el resultado para 2.'));}
  for(var i=1;i<=3;i++){final a=4+i,b=2+i,c=2,volume=a*b*c;list.add(Q('Volumen','Reto '+(i+4).toString()+': volumen de un prisma '+a.toString()+' × '+b.toString()+' × 2 m.',[''+volume.toString()+' m³',''+(a*b).toString()+' m³',''+(a+b+c).toString()+' m³',''+(volume+4).toString()+' m³'],volume.toString()+' m³','Multiplica largo, ancho y altura.'));}
  for(var i=1;i<=3;i++){final center=4+i;list.add(Q(i<3?'Estadística':'Probabilidad',i<3?'Reto '+(i+7).toString()+': media de '+(center-2).toString()+', '+center.toString()+' y '+(center+2).toString()+'.':'Reto 10: hay 3 fichas verdes y 7 rojas. P(verde):',i<3?[center.toString(),(center+1).toString(),(center*3).toString(),(center-1).toString()]:['3/10','7/10','3/7','1/3'],i<3?center.toString():'3/10',i<3?'Suma los tres datos y divide para 3.':'Casos favorables sobre casos totales: 3 de 10.'));}
- return list;
+ const positions=[2,0,3,1,1,3,0,2,3,2,1,0,0,1,2,3];
+ return List<Q>.generate(list.length,(i){
+  final item=list[i],choices=item.options.where((x)=>x!=item.answer).toList();
+  choices.insert(positions[i%positions.length],item.answer);
+  return Q(item.topic,item.text,choices,item.answer,item.hint);
+ });
 }
 final bank=buildBank();
 class Defender{final int row,col;int hp=3;Defender(this.row,this.col);}
