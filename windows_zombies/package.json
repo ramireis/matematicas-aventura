@@ -33,8 +33,11 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Matemáticas vs. Zombis"
+      "shortcutName": "Matemáticas vs. Zombis",
+      "artifactName": "Matematicas_vs_Zombis_EGB_Instalador_${version}_${arch}.${ext}"
     },
-    "artifactName": "Matematicas_vs_Zombis_EGB_${version}_${arch}.${ext}"
+    "portable": {
+      "artifactName": "Matematicas_vs_Zombis_EGB_Portable_${version}_${arch}.${ext}"
+    }
   }
 }
