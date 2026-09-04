@@ -74,7 +74,7 @@ const gradeTopics={
 const speedTypes=[{name:'Lento',v:17,c:'#8bd450'},{name:'Normal',v:25,c:'#5fd47d'},{name:'Rápido',v:34,c:'#ffc857'},{name:'Extremo',v:43,c:'#ff647c'}];
 const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a, pick=a=>a[rnd(0,a.length-1)], shuffle=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1]);
 function gcd(a,b){while(b)[a,b]=[b,a%b];return Math.abs(a)}
-function makeQuestion(){let a,b,c,ans,prompt; const g=state.grade, isl=state.island, level=Math.min(5,Math.ceil(state.exercise/2));
+function makeQuestion(){let a,b,c,ans,prompt;const g=state.grade,isl=state.island,level=Math.min(5,Math.ceil(state.exercise/2));
  if(g===2){
   let limit;
   if(isl===1){limit=Math.min(20,5+level*3);a=rnd(0,Math.floor(limit*.7));b=rnd(0,limit-a);ans=a+b;prompt=`Nivel ${level}: ${a} + ${b}`;}
@@ -82,7 +82,7 @@ function makeQuestion(){let a,b,c,ans,prompt; const g=state.grade, isl=state.isl
   else if(isl===3){limit=Math.min(50,20+level*6);a=rnd(5,limit);b=rnd(0,a);ans=a-b;prompt=`Nivel ${level} · Resta: ${a} − ${b}`;}
   else if(isl===4){limit=Math.min(100,60+level*8);a=rnd(10,Math.floor(limit*.75));b=rnd(1,limit-a);ans=a+b;prompt=`Nivel ${level} · Suma: ${a} + ${b}`;}
   else if(isl===5){limit=Math.min(100,60+level*8);a=rnd(20,limit);b=rnd(0,a);ans=a-b;prompt=`Nivel ${level} · Resta: ${a} − ${b}`;}
-  else {limit=Math.min(100,50+level*10);a=rnd(10,limit);b=rnd(0,a);if(Math.random()<.5){ans=a-b;prompt=`Nivel ${level}: ${a} − ${b}`;}else{b=rnd(0,limit-a);ans=a+b;prompt=`Nivel ${level}: ${a} + ${b}`;}}
+  else{limit=Math.min(100,50+level*10);a=rnd(10,limit);b=rnd(0,a);if(Math.random()<.5){ans=a-b;prompt=`Nivel ${level}: ${a} − ${b}`;}else{b=rnd(0,limit-a);ans=a+b;prompt=`Nivel ${level}: ${a} + ${b}`;}}
  }else if(g===3){
   let limit;
   if(isl===1){limit=Math.min(999,199+level*160);a=rnd(50,Math.floor(limit*.7));b=rnd(10,limit-a);ans=a+b;prompt=`Nivel ${level} · Suma: ${a} + ${b}`;}
@@ -90,28 +90,15 @@ function makeQuestion(){let a,b,c,ans,prompt; const g=state.grade, isl=state.isl
   else if(isl===3){limit=Math.min(1000000,199999+level*160000);a=rnd(50000,Math.floor(limit*.7));b=rnd(10000,limit-a);ans=a+b;prompt=`Nivel ${level}: ${a.toLocaleString('es-EC')} + ${b.toLocaleString('es-EC')}`;}
   else if(isl===4){limit=Math.min(1000000,199999+level*160000);a=rnd(50000,limit);b=rnd(0,a);ans=a-b;prompt=`Nivel ${level}: ${a.toLocaleString('es-EC')} − ${b.toLocaleString('es-EC')}`;}
   else if(isl===5){let maxTable=Math.min(14,level*3);a=rnd(1,maxTable);b=rnd(1,Math.min(14,3+level*2));ans=a*b;prompt=`Nivel ${level} · Tabla: ${a} × ${b}`;}
-  else {let maxTable=Math.min(14,level*3);a=rnd(1,maxTable);b=rnd(1,Math.min(14,3+level*2));c=a*b;ans=a;prompt=`Nivel ${level} · Inversa: ${c} ÷ ${b}`;}
- }else if(isl===1){a=rnd(0,10);b=rnd(0,20-a);ans=a+b;prompt=`Suma: ${a} + ${b}`;}
-  else if(isl===2){a=rnd(10,40);b=rnd(1,50-a);ans=a+b;prompt=`Suma hasta 50: ${a} + ${b}`;}
-  else if(isl===3){a=rnd(10,50);b=rnd(0,a);ans=a-b;prompt=`Resta: ${a} − ${b}`;}
-  else if(isl===4){a=rnd(20,80);b=rnd(1,100-a);ans=a+b;prompt=`Suma hasta 100: ${a} + ${b}`;}
-  else if(isl===5){a=rnd(40,100);b=rnd(0,a);ans=a-b;prompt=`Resta hasta 100: ${a} − ${b}`;}
-  else {a=rnd(10,100);b=rnd(0,a);if(Math.random()<.5){ans=a-b;prompt=`Resuelve: ${a} − ${b}`;}else{b=rnd(0,100-a);ans=a+b;prompt=`Resuelve: ${a} + ${b}`;}}
- }else if(g===3){
-  if(isl===1){a=rnd(100,700);b=rnd(10,999-a);ans=a+b;prompt=`Suma con reagrupación: ${a} + ${b}`;}
-  else if(isl===2){a=rnd(1000,60000);b=rnd(1000,99999-a);ans=a+b;prompt=`Suma: ${a.toLocaleString('es-EC')} + ${b.toLocaleString('es-EC')}`;}
-  else if(isl===3){a=rnd(100000,700000);b=rnd(50000,1000000-a);ans=a+b;prompt=`Suma hasta un millón: ${a.toLocaleString('es-EC')} + ${b.toLocaleString('es-EC')}`;}
-  else if(isl===4){a=rnd(1000,1000000);b=rnd(0,a);ans=a-b;prompt=`Resta: ${a.toLocaleString('es-EC')} − ${b.toLocaleString('es-EC')}`;}
-  else if(isl===5){a=rnd(1,14);b=rnd(1,14);ans=a*b;prompt=`Tabla de multiplicar: ${a} × ${b}`;}
-  else {a=rnd(1,14);b=rnd(1,14);c=a*b;ans=a;prompt=`Operación inversa: ${c} ÷ ${b}`;}
+  else{let maxTable=Math.min(14,level*3);a=rnd(1,maxTable);b=rnd(1,Math.min(14,3+level*2));c=a*b;ans=a;prompt=`Nivel ${level} · Inversa: ${c} ÷ ${b}`;}
  }else if(isl===1){a=rnd(-18,28);b=rnd(-15,24);if(g===7){ans=a+b;prompt=`Calcula: ${a} + (${b})`;}else{c=rnd(2,6);ans=a-b*c;prompt=`Calcula: ${a} − (${b} × ${c})`;}}
  else if(isl===2){let d=pick([2,3,4,5,6,8,10,12]);a=rnd(1,d-1);b=rnd(1,d-1);ans=a+b;prompt=`${a}/${d} + ${b}/${d} = ¿?/ ${d}`;}
  else if(isl===3){a=rnd(2,9);b=rnd(2,10);c=rnd(2,8);if(g===7){ans=b*c;prompt=`Si ${a} artículos cuestan $${a*b}, ¿cuánto cuestan ${c} artículos?`;}else{ans=Math.round((a*b)*(1-c/100)*100)/100;prompt=`$${a*b} con ${c}% de descuento vale:`;}}
- else if(isl===4){a=rnd(2,8);b=rnd(1,15);c=rnd(2,12);ans=c;prompt=g===7?`Completa el patrón: ${a}, ${a+b}, ${a+2*b}, … (aumenta de)`:`Resuelve: ${a}x + ${b} = ${a*c+b}`; if(g===7)ans=b;}
+ else if(isl===4){a=rnd(2,8);b=rnd(1,15);c=rnd(2,12);ans=c;prompt=g===7?`Completa el patrón: ${a}, ${a+b}, ${a+2*b}, … (aumenta de)`:`Resuelve: ${a}x + ${b} = ${a*c+b}`;if(g===7)ans=b;}
  else if(isl===5){a=rnd(3,15);b=rnd(3,12);if(g===7){ans=2*(a+b);prompt=`Perímetro de un rectángulo de ${a} cm por ${b} cm:`;}else{ans=a*b;prompt=`Área de un rectángulo de ${a} cm por ${b} cm:`;}}
- else {a=rnd(3,12);b=rnd(3,12);c=rnd(3,12);if(g===7){ans=a+b+c;prompt=`Total de las frecuencias ${a}, ${b} y ${c}:`;}else{ans=Math.round((a+b+c)/3*100)/100;prompt=`Media de ${a}, ${b} y ${c}:`;}}
- let spread=Math.max(2,Math.round(Math.abs(ans)*.18));let vals=new Set([ans]);while(vals.size<4){let v=ans+pick([-2,-1,1,2])*rnd(1,spread);if(Number.isInteger(ans))v=Math.round(v);else v=Math.round(v*100)/100;vals.add(v)}
- return {prompt,answer:ans,choices:shuffle([...vals])};
+ else{a=rnd(3,12);b=rnd(3,12);c=rnd(3,12);if(g===7){ans=a+b+c;prompt=`Total de las frecuencias ${a}, ${b} y ${c}:`;}else{ans=Math.round((a+b+c)/3*100)/100;prompt=`Media de ${a}, ${b} y ${c}:`;}}
+ let spread=Math.max(2,Math.round(Math.abs(ans)*.18)),vals=new Set([ans]);while(vals.size<4){let v=ans+pick([-2,-1,1,2])*rnd(1,spread);if(Number.isInteger(ans))v=Math.round(v);else v=Math.round(v*100)/100;vals.add(v)}
+ return{prompt,answer:ans,choices:shuffle([...vals])};
 }
 function spawn(count=1){for(let k=0;k<count;k++){const furthest=state.zombies.reduce((m,z)=>Math.max(m,z.x),canvas.width+35);const type=speedTypes[Math.min(3,Math.floor(Math.random()*Math.min(4,state.island+1)))];state.zombies.push({x:furthest+85+rnd(20,75),y:382+rnd(-8,8),speed:type.v*((state.grade===2?.5:state.grade===3?.62:1)+state.island*.035+Math.min(5,state.exercise)*.025),type,phase:Math.random()*6.28,hp:1,hit:0});}}
 function newQuestion(){state.locked=false;state.time=state.grade===2?Math.max(20,30-Math.floor((state.exercise-1)/2)*2):state.grade===3?Math.max(24,38-Math.floor((state.exercise-1)/2)*3):Math.max(10,19-state.island);state.q=makeQuestion();$('#question').textContent=state.q.prompt;$('#answers').innerHTML='';$('#feedback').textContent='';state.q.choices.forEach((v,i)=>{let b=document.createElement('button');b.className='answer';b.textContent=`${'ABCD'[i]}.  ${String(v).replace('.',',')}`;b.onclick=()=>answer(v,b);$('#answers').append(b)});updateHud();if(state.zombies.length<2+state.island)spawn(1);}
