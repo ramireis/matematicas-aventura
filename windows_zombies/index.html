@@ -37,7 +37,7 @@ button{font:inherit}.app{width:min(1180px,100%);margin:auto;padding:16px}.top{di
   <div class="answers" id="answers"></div><div class="feedback" id="feedback"></div>
  </section>
 </main>
-<div class="overlay" id="startOverlay"><div class="modal"><h1>Defiende el<br><b>conocimiento</b></h1><p>Resuelve cada desafío antes de que la horda alcance el refugio. Los zombis más rápidos exigen decisiones ágiles.</p><div class="grades"><button class="grade" data-grade="7"><strong>7.º EGB</strong><span>Enteros, fracciones, proporcionalidad, porcentajes y geometría.</span></button><button class="grade" data-grade="8"><strong>8.º EGB</strong><span>Racionales, potencias, ecuaciones, funciones y geometría.</span></button></div><p class="note">Versión educativa de práctica. Guarda el progreso en este dispositivo y funciona sin conexión.</p></div></div>
+<div class="overlay" id="startOverlay"><div class="modal"><h1>Defiende el<br><b>conocimiento</b></h1><p>Resuelve cada desafío antes de que la horda alcance el refugio. Los zombis más rápidos exigen decisiones ágiles.</p><div class="grades"><button class="grade" data-grade="2"><strong>2.º EGB · 8 años</strong><span>Sumas y restas progresivas hasta 100.</span></button><button class="grade" data-grade="3"><strong>3.º EGB · 9 años</strong><span>Sumas y restas hasta 1 000 000, tablas del 1 al 14 y divisiones inversas.</span></button><button class="grade" data-grade="7"><strong>7.º EGB</strong><span>Enteros, fracciones, proporcionalidad, porcentajes y geometría.</span></button><button class="grade" data-grade="8"><strong>8.º EGB</strong><span>Racionales, potencias, ecuaciones, funciones y geometría.</span></button></div><p class="note">Versión educativa de práctica. Guarda el progreso en este dispositivo y funciona sin conexión.</p></div></div>
 <div class="overlay hidden" id="endOverlay"><div class="modal"><h1 id="endTitle">Misión<br><b>completada</b></h1><p id="endText"></p><button class="primary" id="continueBtn">Continuar</button></div></div>
 <div class="toast" id="toast"></div>
 <script>
@@ -56,7 +56,21 @@ const speedTypes=[{name:'Lento',v:17,c:'#8bd450'},{name:'Normal',v:25,c:'#5fd47d
 const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a, pick=a=>a[rnd(0,a.length-1)], shuffle=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1]);
 function gcd(a,b){while(b)[a,b]=[b,a%b];return Math.abs(a)}
 function makeQuestion(){let a,b,c,ans,prompt; const g=state.grade, isl=state.island;
- if(isl===1){a=rnd(-18,28);b=rnd(-15,24);if(g===7){ans=a+b;prompt=`Calcula: ${a} + (${b})`;}else{c=rnd(2,6);ans=a-b*c;prompt=`Calcula: ${a} − (${b} × ${c})`;}}
+ if(g===2){
+  if(isl===1){a=rnd(0,10);b=rnd(0,20-a);ans=a+b;prompt=`Suma: ${a} + ${b}`;}
+  else if(isl===2){a=rnd(10,40);b=rnd(1,50-a);ans=a+b;prompt=`Suma hasta 50: ${a} + ${b}`;}
+  else if(isl===3){a=rnd(10,50);b=rnd(0,a);ans=a-b;prompt=`Resta: ${a} − ${b}`;}
+  else if(isl===4){a=rnd(20,80);b=rnd(1,100-a);ans=a+b;prompt=`Suma hasta 100: ${a} + ${b}`;}
+  else if(isl===5){a=rnd(40,100);b=rnd(0,a);ans=a-b;prompt=`Resta hasta 100: ${a} − ${b}`;}
+  else {a=rnd(10,100);b=rnd(0,a);if(Math.random()<.5){ans=a-b;prompt=`Resuelve: ${a} − ${b}`;}else{b=rnd(0,100-a);ans=a+b;prompt=`Resuelve: ${a} + ${b}`;}}
+ }else if(g===3){
+  if(isl===1){a=rnd(100,700);b=rnd(10,999-a);ans=a+b;prompt=`Suma con reagrupación: ${a} + ${b}`;}
+  else if(isl===2){a=rnd(1000,60000);b=rnd(1000,99999-a);ans=a+b;prompt=`Suma: ${a.toLocaleString('es-EC')} + ${b.toLocaleString('es-EC')}`;}
+  else if(isl===3){a=rnd(100000,700000);b=rnd(50000,1000000-a);ans=a+b;prompt=`Suma hasta un millón: ${a.toLocaleString('es-EC')} + ${b.toLocaleString('es-EC')}`;}
+  else if(isl===4){a=rnd(1000,1000000);b=rnd(0,a);ans=a-b;prompt=`Resta: ${a.toLocaleString('es-EC')} − ${b.toLocaleString('es-EC')}`;}
+  else if(isl===5){a=rnd(1,14);b=rnd(1,14);ans=a*b;prompt=`Tabla de multiplicar: ${a} × ${b}`;}
+  else {a=rnd(1,14);b=rnd(1,14);c=a*b;ans=a;prompt=`Operación inversa: ${c} ÷ ${b}`;}
+ }else if(isl===1){a=rnd(-18,28);b=rnd(-15,24);if(g===7){ans=a+b;prompt=`Calcula: ${a} + (${b})`;}else{c=rnd(2,6);ans=a-b*c;prompt=`Calcula: ${a} − (${b} × ${c})`;}}
  else if(isl===2){let d=pick([2,3,4,5,6,8,10,12]);a=rnd(1,d-1);b=rnd(1,d-1);ans=a+b;prompt=`${a}/${d} + ${b}/${d} = ¿?/ ${d}`;}
  else if(isl===3){a=rnd(2,9);b=rnd(2,10);c=rnd(2,8);if(g===7){ans=b*c;prompt=`Si ${a} artículos cuestan $${a*b}, ¿cuánto cuestan ${c} artículos?`;}else{ans=Math.round((a*b)*(1-c/100)*100)/100;prompt=`$${a*b} con ${c}% de descuento vale:`;}}
  else if(isl===4){a=rnd(2,8);b=rnd(1,15);c=rnd(2,12);ans=c;prompt=g===7?`Completa el patrón: ${a}, ${a+b}, ${a+2*b}, … (aumenta de)`:`Resuelve: ${a}x + ${b} = ${a*c+b}`; if(g===7)ans=b;}
