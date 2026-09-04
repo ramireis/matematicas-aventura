@@ -74,9 +74,24 @@ const gradeTopics={
 const speedTypes=[{name:'Lento',v:17,c:'#8bd450'},{name:'Normal',v:25,c:'#5fd47d'},{name:'Rápido',v:34,c:'#ffc857'},{name:'Extremo',v:43,c:'#ff647c'}];
 const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a, pick=a=>a[rnd(0,a.length-1)], shuffle=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1]);
 function gcd(a,b){while(b)[a,b]=[b,a%b];return Math.abs(a)}
-function makeQuestion(){let a,b,c,ans,prompt; const g=state.grade, isl=state.island;
+function makeQuestion(){let a,b,c,ans,prompt; const g=state.grade, isl=state.island, level=Math.min(5,Math.ceil(state.exercise/2));
  if(g===2){
-  if(isl===1){a=rnd(0,10);b=rnd(0,20-a);ans=a+b;prompt=`Suma: ${a} + ${b}`;}
+  let limit;
+  if(isl===1){limit=Math.min(20,5+level*3);a=rnd(0,Math.floor(limit*.7));b=rnd(0,limit-a);ans=a+b;prompt=`Nivel ${level}: ${a} + ${b}`;}
+  else if(isl===2){limit=Math.min(50,20+level*6);a=rnd(5,Math.floor(limit*.75));b=rnd(1,limit-a);ans=a+b;prompt=`Nivel ${level} · Suma: ${a} + ${b}`;}
+  else if(isl===3){limit=Math.min(50,20+level*6);a=rnd(5,limit);b=rnd(0,a);ans=a-b;prompt=`Nivel ${level} · Resta: ${a} − ${b}`;}
+  else if(isl===4){limit=Math.min(100,60+level*8);a=rnd(10,Math.floor(limit*.75));b=rnd(1,limit-a);ans=a+b;prompt=`Nivel ${level} · Suma: ${a} + ${b}`;}
+  else if(isl===5){limit=Math.min(100,60+level*8);a=rnd(20,limit);b=rnd(0,a);ans=a-b;prompt=`Nivel ${level} · Resta: ${a} − ${b}`;}
+  else {limit=Math.min(100,50+level*10);a=rnd(10,limit);b=rnd(0,a);if(Math.random()<.5){ans=a-b;prompt=`Nivel ${level}: ${a} − ${b}`;}else{b=rnd(0,limit-a);ans=a+b;prompt=`Nivel ${level}: ${a} + ${b}`;}}
+ }else if(g===3){
+  let limit;
+  if(isl===1){limit=Math.min(999,199+level*160);a=rnd(50,Math.floor(limit*.7));b=rnd(10,limit-a);ans=a+b;prompt=`Nivel ${level} · Suma: ${a} + ${b}`;}
+  else if(isl===2){limit=Math.min(99999,19999+level*16000);a=rnd(1000,Math.floor(limit*.7));b=rnd(1000,limit-a);ans=a+b;prompt=`Nivel ${level}: ${a.toLocaleString('es-EC')} + ${b.toLocaleString('es-EC')}`;}
+  else if(isl===3){limit=Math.min(1000000,199999+level*160000);a=rnd(50000,Math.floor(limit*.7));b=rnd(10000,limit-a);ans=a+b;prompt=`Nivel ${level}: ${a.toLocaleString('es-EC')} + ${b.toLocaleString('es-EC')}`;}
+  else if(isl===4){limit=Math.min(1000000,199999+level*160000);a=rnd(50000,limit);b=rnd(0,a);ans=a-b;prompt=`Nivel ${level}: ${a.toLocaleString('es-EC')} − ${b.toLocaleString('es-EC')}`;}
+  else if(isl===5){let maxTable=Math.min(14,level*3);a=rnd(1,maxTable);b=rnd(1,Math.min(14,3+level*2));ans=a*b;prompt=`Nivel ${level} · Tabla: ${a} × ${b}`;}
+  else {let maxTable=Math.min(14,level*3);a=rnd(1,maxTable);b=rnd(1,Math.min(14,3+level*2));c=a*b;ans=a;prompt=`Nivel ${level} · Inversa: ${c} ÷ ${b}`;}
+ }else if(isl===1){a=rnd(0,10);b=rnd(0,20-a);ans=a+b;prompt=`Suma: ${a} + ${b}`;}
   else if(isl===2){a=rnd(10,40);b=rnd(1,50-a);ans=a+b;prompt=`Suma hasta 50: ${a} + ${b}`;}
   else if(isl===3){a=rnd(10,50);b=rnd(0,a);ans=a-b;prompt=`Resta: ${a} − ${b}`;}
   else if(isl===4){a=rnd(20,80);b=rnd(1,100-a);ans=a+b;prompt=`Suma hasta 100: ${a} + ${b}`;}
@@ -98,8 +113,8 @@ function makeQuestion(){let a,b,c,ans,prompt; const g=state.grade, isl=state.isl
  let spread=Math.max(2,Math.round(Math.abs(ans)*.18));let vals=new Set([ans]);while(vals.size<4){let v=ans+pick([-2,-1,1,2])*rnd(1,spread);if(Number.isInteger(ans))v=Math.round(v);else v=Math.round(v*100)/100;vals.add(v)}
  return {prompt,answer:ans,choices:shuffle([...vals])};
 }
-function spawn(count=1){for(let k=0;k<count;k++){const furthest=state.zombies.reduce((m,z)=>Math.max(m,z.x),canvas.width+35);const type=speedTypes[Math.min(3,Math.floor(Math.random()*Math.min(4,state.island+1)))];state.zombies.push({x:furthest+85+rnd(20,75),y:382+rnd(-8,8),speed:type.v*(1+state.island*.055),type,phase:Math.random()*6.28,hp:1,hit:0});}}
-function newQuestion(){state.locked=false;state.time=Math.max(10,19-state.island);state.q=makeQuestion();$('#question').textContent=state.q.prompt;$('#answers').innerHTML='';$('#feedback').textContent='';state.q.choices.forEach((v,i)=>{let b=document.createElement('button');b.className='answer';b.textContent=`${'ABCD'[i]}.  ${String(v).replace('.',',')}`;b.onclick=()=>answer(v,b);$('#answers').append(b)});updateHud();if(state.zombies.length<2+state.island)spawn(1);}
+function spawn(count=1){for(let k=0;k<count;k++){const furthest=state.zombies.reduce((m,z)=>Math.max(m,z.x),canvas.width+35);const type=speedTypes[Math.min(3,Math.floor(Math.random()*Math.min(4,state.island+1)))];state.zombies.push({x:furthest+85+rnd(20,75),y:382+rnd(-8,8),speed:type.v*((state.grade===2?.5:state.grade===3?.62:1)+state.island*.035+Math.min(5,state.exercise)*.025),type,phase:Math.random()*6.28,hp:1,hit:0});}}
+function newQuestion(){state.locked=false;state.time=state.grade===2?Math.max(20,30-Math.floor((state.exercise-1)/2)*2):state.grade===3?Math.max(24,38-Math.floor((state.exercise-1)/2)*3):Math.max(10,19-state.island);state.q=makeQuestion();$('#question').textContent=state.q.prompt;$('#answers').innerHTML='';$('#feedback').textContent='';state.q.choices.forEach((v,i)=>{let b=document.createElement('button');b.className='answer';b.textContent=`${'ABCD'[i]}.  ${String(v).replace('.',',')}`;b.onclick=()=>answer(v,b);$('#answers').append(b)});updateHud();if(state.zombies.length<2+state.island)spawn(1);}
 function answer(v,btn){if(state.locked)return;state.locked=true;const ok=Math.abs(v-state.q.answer)<1e-8;document.querySelectorAll('.answer').forEach(b=>b.disabled=true);if(ok){btn.classList.add('correct');state.streak++;state.islandCorrect++;state.score+=100+state.streak*15+Math.round(state.time)*5;$('#feedback').textContent='¡Impacto matemático! Respuesta correcta.';shoot();tone(660,.09);setTimeout(finishQuestion,700)}else{btn.classList.add('wrong');state.streak=0;const far=Math.abs(v-state.q.answer)>Math.max(2,Math.abs(state.q.answer)*.35);spawn(far?2:1);$('#feedback').textContent=far?'Respuesta muy alejada: llegan 2 zombis.':'Respuesta incorrecta: llega 1 zombi.';tone(130,.18);setTimeout(finishQuestion,900)}updateHud();}
 function finishQuestion(){state.exercise++;if(state.exercise>10){state.running=false;state.islandPassed=state.islandCorrect>=4;if(!state.islandPassed){$('#endTitle').innerHTML='Isla<br><b>en peligro</b>';$('#endText').textContent=`Lograste ${state.islandCorrect} de 10 aciertos. Necesitas mínimo 4 para liberar la isla. Repetirás: ${gradeTopics[state.grade][state.island-1]}.`;$('#continueBtn').textContent='Repetir isla';$('#endOverlay').classList.remove('hidden');return}let done=state.island===6,nextTopic=done?'':gradeTopics[state.grade][state.island];$('#endTitle').innerHTML=done?'Campaña<br><b>superada</b>':'Isla<br><b>liberada</b>';$('#endText').textContent=`Conseguiste ${state.islandCorrect} de 10 aciertos, eliminaste ${state.kills} zombis y acumulaste ${state.score} puntos. ${done?'Has completado las seis islas.':`PRÓXIMA ISLA: ${nextTopic}.`}`;$('#continueBtn').textContent=done?'Jugar nuevamente':`Ir a: ${nextTopic}`;$('#endOverlay').classList.remove('hidden');localStorage.setItem('mz_best',Math.max(state.score,+(localStorage.getItem('mz_best')||0)));return}newQuestion();}
 function shoot(){if(!state.zombies.length){spawn(1)}const target=state.zombies.reduce((a,b)=>a.x<b.x?a:b);state.shots.push({x:176,y:338,tx:target.x,ty:target.y-55,target,t:0});}
