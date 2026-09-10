@@ -47,7 +47,7 @@ public final class MainActivity extends Activity {
         game.setVerticalScrollBarEnabled(false);
         game.setHorizontalScrollBarEnabled(false);
         setContentView(game);
-        if (state == null) game.loadUrl("file:///android_asset/www/index.html");
+        if (state == null) game.loadUrl("file:///android_asset/index.html");
         else game.restoreState(state);
     }
 
