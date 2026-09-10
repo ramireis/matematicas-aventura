@@ -6,8 +6,8 @@ import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowInsets;
-import android.view.WindowInsetsController;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -20,10 +20,13 @@ public final class MainActivity extends Activity {
     @SuppressLint("SetJavaScriptEnabled")
     @Override protected void onCreate(Bundle state) {
         super.onCreate(state);
-        enterImmersive();
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);
         game = new WebView(this);
         game.setBackgroundColor(Color.rgb(3, 10, 18));
-        game.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        // Dejar que Android elija la capa evita cierres en GPU antiguas.
+        game.setLayerType(View.LAYER_TYPE_NONE, null);
         WebSettings s = game.getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
@@ -47,29 +50,15 @@ public final class MainActivity extends Activity {
         game.setVerticalScrollBarEnabled(false);
         game.setHorizontalScrollBarEnabled(false);
         setContentView(game);
+        game.postDelayed(this::enterImmersive, 250);
         if (state == null) game.loadUrl("file:///android_asset/index.html");
         else game.restoreState(state);
     }
 
     private void enterImmersive() {
-        if (android.os.Build.VERSION.SDK_INT >= 30) {
-            getWindow().setDecorFitsSystemWindows(false);
-            WindowInsetsController c = getWindow().getInsetsController();
-            if (c != null) {
-                c.hide(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
-                c.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-            }
-        } else {
-            getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        }
-    }
-
-    @Override public void onWindowFocusChanged(boolean focused) {
-        super.onWindowFocusChanged(focused);
-        if (focused) enterImmersive();
+        getWindow().getDecorView().setSystemUiVisibility(
+            View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
     }
 
     @Override protected void onSaveInstanceState(Bundle out) {
@@ -86,6 +75,6 @@ public final class MainActivity extends Activity {
     }
 
     @Override protected void onPause() { game.onPause(); super.onPause(); }
-    @Override protected void onResume() { super.onResume(); game.onResume(); enterImmersive(); }
+    @Override protected void onResume() { super.onResume(); game.onResume(); }
     @Override protected void onDestroy() { game.destroy(); super.onDestroy(); }
 }
