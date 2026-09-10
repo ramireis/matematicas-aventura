@@ -1,4 +1,4 @@
-name: Construir APK Android Estudiante 4.1.2
+name: Construir APK Android Estudiante 4.1.3
 on:
   push:
     branches: [android-estudiante-4.1.0]
@@ -22,10 +22,10 @@ jobs:
       - name: Compilar APK instalable
         run: gradle :app:assembleDebug --stacktrace
       - name: Renombrar entrega
-        run: cp app/build/outputs/apk/debug/app-debug.apk Matematicas_vs_Zombis_ESTUDIANTE_4.1.2_ANDROID_PANTALLAS.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk Matematicas_vs_Zombis_ESTUDIANTE_4.1.3_BOTON_ENTRAR.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: Matematicas_vs_Zombis_ESTUDIANTE_4.1.2_ANDROID_PANTALLAS
-          path: Matematicas_vs_Zombis_ESTUDIANTE_4.1.2_ANDROID_PANTALLAS.apk
+          name: Matematicas_vs_Zombis_ESTUDIANTE_4.1.3_BOTON_ENTRAR
+          path: Matematicas_vs_Zombis_ESTUDIANTE_4.1.3_BOTON_ENTRAR.apk
           if-no-files-found: error
           retention-days: 30
