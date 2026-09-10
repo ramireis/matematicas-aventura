@@ -6,7 +6,7 @@
         android:fullBackupContent="false"
         android:hardwareAccelerated="true"
         android:icon="@drawable/app_icon"
-        android:label="Matemáticas vs. Zombis"
+        android:label="MZ Zombis 4.1.4"
         android:largeHeap="false"
         android:usesCleartextTraffic="false"
         android:theme="@style/AppTheme">
