@@ -8,8 +8,8 @@ android {
         applicationId 'ec.edu.matematicasvszombis.estudiante'
         minSdk 23
         targetSdk 35
-        versionCode 40100
-        versionName '4.1.0'
+        versionCode 40101
+        versionName '4.1.1'
     }
 
     buildTypes {
