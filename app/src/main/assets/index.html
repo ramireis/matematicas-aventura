@@ -56,6 +56,37 @@ canvas{transform:translateZ(0);will-change:contents}
   .quiz{padding:10px}.answers{gap:7px;margin-top:8px}.answer{padding:10px 12px}
 }
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+/* Android 4.1.2: ningún diálogo puede quedar fuera de la pantalla. */
+.overlay{
+  place-items:start center;
+  overflow-x:hidden;
+  overflow-y:auto;
+  padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+.overlay>.modal{
+  width:min(1080px,100%);
+  max-width:100%;
+  max-height:calc(100vh - 16px);
+  max-height:calc(100dvh - 16px);
+  margin:auto;
+  padding:clamp(12px,2.2vw,24px);
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+}
+.overlay>.modal>*:last-child{margin-bottom:8px}
+@media (orientation:landscape) and (max-height:600px){
+  .overlay{padding:6px}
+  .overlay>.modal{max-height:calc(100vh - 12px);max-height:calc(100dvh - 12px);border-radius:14px;padding:12px}
+  .modal h1{font-size:clamp(25px,6vh,40px)}.modal h2{margin:6px 0;font-size:20px}.modal p{font-size:14px;margin:7px 0}
+  .motion-icons{height:34px}.motion-icons span{font-size:22px}
+  .grades{gap:7px}.grade{padding:10px}.grade strong{font-size:19px}
+  .registration-grid{gap:7px}.field input{padding:9px}.world-grid-large{gap:8px}.world-card{min-height:132px;padding:10px}.world-card .landscape{font-size:30px}
+  .checkpoint-question{font-size:20px;margin:10px 0 7px}.checkpoint-answers{gap:7px}.checkpoint-answers button{padding:9px}
+}
 </style>
 </head>
 <body>
