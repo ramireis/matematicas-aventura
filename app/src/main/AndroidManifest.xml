@@ -6,7 +6,7 @@
         android:fullBackupContent="false"
         android:hardwareAccelerated="true"
         android:icon="@drawable/app_icon"
-        android:label="MZ Zombis 4.1.5"
+        android:label="MZ Zombis 4.3.0"
         android:largeHeap="false"
         android:usesCleartextTraffic="false"
         android:theme="@style/AppTheme">
