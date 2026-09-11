@@ -1,4 +1,4 @@
-name: Construir Android 4.1.5 y Windows 4.1.6
+name: Construir Android 4.1.5 y Windows 4.1.7
 on:
   push:
     branches: [android-estudiante-4.1.0]
@@ -41,19 +41,25 @@ jobs:
       - name: Instalar dependencias
         shell: pwsh
         run: npm install --no-audit --no-fund
-      - name: Construir EXE portable reparado
+      - name: Construir carpeta ejecutable estable
         shell: pwsh
         run: npm run dist:win
-      - name: Verificar ejecutable
+      - name: Agregar instrucciones y verificar
         shell: pwsh
         run: |
-          $exe = "dist/Matematicas_vs_Zombis_ESTUDIANTE_4.1.6_WINDOWS_x64_REPARADO.exe"
+          $folder = "dist/win-unpacked"
+          $exe = "$folder/INICIAR_MATEMATICAS_VS_ZOMBIS.exe"
           if (!(Test-Path $exe)) { throw "No se genero el ejecutable" }
-          if ((Get-Item $exe).Length -lt 1000000) { throw "El ejecutable generado no es valido" }
+          if (!(Test-Path "$folder/resources/app.asar")) { throw "Faltan recursos del programa" }
+          if ((Get-Item $exe).Length -lt 1000000) { throw "El ejecutable no es valido" }
+          "MATEMATICAS VS ZOMBIS 4.1.7" | Set-Content "$folder/LEAME_PRIMERO.txt"
+          "1. Extraiga completamente el ZIP." | Add-Content "$folder/LEAME_PRIMERO.txt"
+          "2. No mueva ni separe el archivo EXE de esta carpeta." | Add-Content "$folder/LEAME_PRIMERO.txt"
+          "3. Ejecute INICIAR_MATEMATICAS_VS_ZOMBIS.exe." | Add-Content "$folder/LEAME_PRIMERO.txt"
           Get-FileHash $exe -Algorithm SHA256
       - uses: actions/upload-artifact@v4
         with:
-          name: Matematicas_vs_Zombis_ESTUDIANTE_4.1.6_WINDOWS_x64_REPARADO
-          path: dist/Matematicas_vs_Zombis_ESTUDIANTE_4.1.6_WINDOWS_x64_REPARADO.exe
+          name: Matematicas_vs_Zombis_ESTUDIANTE_4.1.7_WINDOWS_CARPETA_ESTABLE
+          path: dist/win-unpacked/**
           if-no-files-found: error
           retention-days: 30
