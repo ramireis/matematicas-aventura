@@ -1,20 +1,21 @@
 plugins { id 'com.android.application' }
 
 android {
-    namespace 'ec.edu.misionmatematica'
+    namespace 'ec.edu.matematicasvszombis'
     compileSdk 35
 
     defaultConfig {
-        applicationId 'ec.edu.misionmatematica'
-        minSdk 26
+        applicationId 'ec.edu.matematicasvszombis.estudiante.v430'
+        minSdk 23
         targetSdk 35
-        versionCode 1
-        versionName '1.0.0'
+        versionCode 40300
+        versionName '4.3.0'
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

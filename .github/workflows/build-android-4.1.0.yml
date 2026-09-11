@@ -1,0 +1,59 @@
+name: Construir Android 4.3.0 y Windows 4.3.0
+on:
+  push:
+    branches: [android-estudiante-4.1.0]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Compilar APK instalable
+        run: gradle :app:assembleDebug --stacktrace
+      - name: Renombrar entrega
+        run: cp app/build/outputs/apk/debug/app-debug.apk Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_ANDROID_LIMPIO_DOCENTE_QR.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_ANDROID_LIMPIO_DOCENTE_QR
+          path: Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_ANDROID_LIMPIO_DOCENTE_QR.apk
+          if-no-files-found: error
+          retention-days: 30
+
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Instalar dependencias
+        shell: pwsh
+        run: npm install --no-audit --no-fund
+      - name: Construir EXE único
+        shell: pwsh
+        run: npm run dist:win
+      - name: Verificar ejecutable
+        shell: pwsh
+        run: |
+          $exe = "dist/Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_WINDOWS_LIMPIO_DOCENTE_QR.exe"
+          if (!(Test-Path $exe)) { throw "No se genero el ejecutable" }
+          if ((Get-Item $exe).Length -lt 50000000) { throw "El ejecutable esta incompleto" }
+          Get-FileHash $exe -Algorithm SHA256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_WINDOWS_LIMPIO_DOCENTE_QR
+          path: dist/Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_WINDOWS_LIMPIO_DOCENTE_QR.exe
+          if-no-files-found: error
+          retention-days: 30
