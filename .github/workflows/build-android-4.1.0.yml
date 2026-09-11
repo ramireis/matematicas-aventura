@@ -1,4 +1,4 @@
-name: Construir Android 4.1.5 y Windows 4.2.0
+name: Construir Android 4.1.5 y Windows 4.2.1
 on:
   push:
     branches: [android-estudiante-4.1.0]
@@ -37,32 +37,23 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-node-version: '20'
       - name: Instalar dependencias
         shell: pwsh
         run: npm install --no-audit --no-fund
-      - name: Construir carpeta ejecutable estable
+      - name: Construir EXE único
         shell: pwsh
         run: npm run dist:win
-      - name: Agregar instrucciones y verificar
+      - name: Verificar ejecutable
         shell: pwsh
         run: |
-          $folder = "dist/win-unpacked"
-          $exe = "$folder/INICIAR_MATEMATICAS_VS_ZOMBIS.exe"
-          if (!(Test-Path $exe)) { throw "No se genero el ejecutable" }
-          if (!(Test-Path "$folder/resources/app.asar")) { throw "Faltan recursos del programa" }
-          if (!(Test-Path "$folder/resources/www/index.html")) { throw "Falta index.html" }
-          if (!(Test-Path "$folder/resources/www/qrcode.js")) { throw "Faltan recursos interactivos" }
-          if ((Get-Item "$folder/resources/www/index.html").Length -lt 100000) { throw "El juego esta incompleto" }
-          if ((Get-Item $exe).Length -lt 1000000) { throw "El ejecutable no es valido" }
-          "MATEMATICAS VS ZOMBIS 4.2.0" | Set-Content "$folder/LEAME_PRIMERO.txt"
-          "1. Extraiga completamente el ZIP." | Add-Content "$folder/LEAME_PRIMERO.txt"
-          "2. No mueva ni separe el archivo EXE de esta carpeta." | Add-Content "$folder/LEAME_PRIMERO.txt"
-          "3. Ejecute INICIAR_MATEMATICAS_VS_ZOMBIS.exe." | Add-Content "$folder/LEAME_PRIMERO.txt"
+          $exe = "dist/Matematicas_vs_Zombis_ESTUDIANTE_4.2.1_WINDOWS_UN_SOLO_ARCHIVO.exe"
+          if (!(Test-Path-Path $exe)) { throw "No se genero el ejecutable" }
+          if ((Get-Item $exe).Length -lt 50000000) { throw "El ejecutable esta incompleto" }
           Get-FileHash $exe -Algorithm SHA256
       - uses: actions/upload-artifact@v4
         with:
-          name: Matematicas_vs_Zombis_ESTUDIANTE_4.2.0_WINDOWS_CARPETA_ESTABLE
-          path: dist/win-unpacked/**
+          name: Matematicas_vs_Zombis_ESTUDIANTE_4.2.1_WINDOWS_UN_SOLO_ARCHIVO
+          path: dist/Matematicas_vs_Zombis_ESTUDIANTE_4.2.1_WINDOWS_UN_SOLO_ARCHIVO.exe
           if-no-files-found: error
           retention-days: 30
