@@ -24,7 +24,7 @@ function showLoadError(details) {
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    title: 'Matemáticas vs. Zombis 4.1.7',
+    title: 'Matemáticas vs. Zombis 4.1.8',
     width: 1280,
     height: 800,
     minWidth: 900,
@@ -60,12 +60,12 @@ function createWindow() {
     showLoadError('Error ' + code + ': ' + description);
   });
 
-  const gameFile = path.join(__dirname, 'app', 'src', 'main', 'assets', 'www', 'index.html');
+  const gameFile = path.join(process.resourcesPath, 'www', 'index.html');
   mainWindow.loadFile(gameFile).catch(error => showLoadError(error.message));
 }
 
 app.whenReady().then(() => {
-  app.setAppUserModelId('ec.edu.matematicasvszombis.estudiante.v417');
+  app.setAppUserModelId('ec.edu.matematicasvszombis.estudiante.v418');
   createWindow();
 }).catch(error => dialog.showErrorBox('Matemáticas vs. Zombis', error.message));
 
