@@ -1,4 +1,4 @@
-name: Construir Android 4.1.5 y Windows 4.3.0
+name: Construir Android 4.3.0 y Windows 4.3.0
 on:
   push:
     branches: [android-estudiante-4.1.0]
@@ -22,11 +22,11 @@ jobs:
       - name: Compilar APK instalable
         run: gradle :app:assembleDebug --stacktrace
       - name: Renombrar entrega
-        run: cp app/build/outputs/apk/debug/app-debug.apk Matematicas_vs_Zombis_ESTUDIANTE_4.1.5_INICIO_DIRECTO.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_ANDROID_LIMPIO_DOCENTE_QR.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: Matematicas_vs_Zombis_ESTUDIANTE_4.1.5_INICIO_DIRECTO
-          path: Matematicas_vs_Zombis_ESTUDIANTE_4.1.5_INICIO_DIRECTO.apk
+          name: Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_ANDROID_LIMPIO_DOCENTE_QR
+          path: Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_ANDROID_LIMPIO_DOCENTE_QR.apk
           if-no-files-found: error
           retention-days: 30
 
