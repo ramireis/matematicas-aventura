@@ -1,6 +1,6 @@
 {
   "name": "matematicas-vs-zombis-estudiante",
-  "version": "4.1.5",
+  "version": "4.1.6",
   "description": "Juego educativo Matemáticas vs. Zombis para estudiantes",
   "main": "electron-main.js",
   "author": "Proyecto Matemáticas Aventura",
@@ -13,8 +13,8 @@
     "electron-builder": "25.1.8"
   },
   "build": {
-    "appId": "ec.edu.matematicasvszombis.estudiante.v415",
-    "productName": "Matematicas vs Zombis 4.1.5",
+    "appId": "ec.edu.matematicasvszombis.estudiante.v416",
+    "productName": "Matematicas vs Zombis 4.1.6",
     "asar": true,
     "files": [
       "electron-main.js",
@@ -27,10 +27,10 @@
           "arch": ["x64"]
         }
       ],
-      "artifactName": "Matematicas_vs_Zombis_ESTUDIANTE_4.1.5_WINDOWS_x64_PORTABLE.exe"
+      "artifactName": "Matematicas_vs_Zombis_ESTUDIANTE_4.1.6_WINDOWS_x64_REPARADO.exe"
     },
     "portable": {
-      "artifactName": "Matematicas_vs_Zombis_ESTUDIANTE_4.1.5_WINDOWS_x64_PORTABLE.exe"
+      "artifactName": "Matematicas_vs_Zombis_ESTUDIANTE_4.1.6_WINDOWS_x64_REPARADO.exe"
     }
   }
 }
