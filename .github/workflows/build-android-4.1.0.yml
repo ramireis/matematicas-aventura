@@ -52,7 +52,7 @@ jobs:
           if (!(Test-Path $exe)) { throw "No se genero el ejecutable" }
           if (!(Test-Path "$folder/resources/app.asar")) { throw "Faltan recursos del programa" }
           if (!(Test-Path "$folder/resources/www/index.html")) { throw "Falta index.html" }
-          if (!(Test-Path "$folder/resources/www/assets/world-panorama.png")) { throw "Faltan imagenes" }
+          if (!(Test-Path "$folder/resources/www/qrcode.js")) { throw "Faltan recursos interactivos" }
           if ((Get-Item "$folder/resources/www/index.html").Length -lt 100000) { throw "El juego esta incompleto" }
           if ((Get-Item $exe).Length -lt 1000000) { throw "El ejecutable no es valido" }
           "MATEMATICAS VS ZOMBIS 4.1.8" | Set-Content "$folder/LEAME_PRIMERO.txt"
