@@ -1,4 +1,4 @@
-name: Construir Android 4.1.5 y Windows 4.1.8
+name: Construir Android 4.1.5 y Windows 4.1.9
 on:
   push:
     branches: [android-estudiante-4.1.0]
@@ -55,14 +55,14 @@ jobs:
           if (!(Test-Path "$folder/resources/www/qrcode.js")) { throw "Faltan recursos interactivos" }
           if ((Get-Item "$folder/resources/www/index.html").Length -lt 100000) { throw "El juego esta incompleto" }
           if ((Get-Item $exe).Length -lt 1000000) { throw "El ejecutable no es valido" }
-          "MATEMATICAS VS ZOMBIS 4.1.8" | Set-Content "$folder/LEAME_PRIMERO.txt"
+          "MATEMATICAS VS ZOMBIS 4.1.9" | Set-Content "$folder/LEAME_PRIMERO.txt"
           "1. Extraiga completamente el ZIP." | Add-Content "$folder/LEAME_PRIMERO.txt"
           "2. No mueva ni separe el archivo EXE de esta carpeta." | Add-Content "$folder/LEAME_PRIMERO.txt"
           "3. Ejecute INICIAR_MATEMATICAS_VS_ZOMBIS.exe." | Add-Content "$folder/LEAME_PRIMERO.txt"
           Get-FileHash $exe -Algorithm SHA256
       - uses: actions/upload-artifact@v4
         with:
-          name: Matematicas_vs_Zombis_ESTUDIANTE_4.1.8_WINDOWS_CARPETA_ESTABLE
+          name: Matematicas_vs_Zombis_ESTUDIANTE_4.1.9_WINDOWS_CARPETA_ESTABLE
           path: dist/win-unpacked/**
           if-no-files-found: error
           retention-days: 30
