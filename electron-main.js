@@ -24,7 +24,7 @@ function showLoadError(details) {
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    title: 'Matemáticas vs. Zombis 4.2.0',
+    title: 'Matemáticas vs. Zombis 4.2.1',
     width: 1280,
     height: 800,
     minWidth: 900,
@@ -65,7 +65,7 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  app.setAppUserModelId('ec.edu.matematicasvszombis.estudiante.v420');
+  app.setAppUserModelId('ec.edu.matematicasvszombis.estudiante.v421');
   createWindow();
 }).catch(error => dialog.showErrorBox('Matemáticas vs. Zombis', error.message));
 
