@@ -21,7 +21,7 @@
     ],
     "extraResources": [
       {
-        "from": "app/src/main/assets/www",
+        "from": "app/src/main/assets",
         "to": "www",
         "filter": ["**/*"]
       }
