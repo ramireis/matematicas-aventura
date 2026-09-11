@@ -1,4 +1,4 @@
-name: Construir Android y Windows Estudiante 4.1.5
+name: Construir Android 4.1.5 y Windows 4.1.6
 on:
   push:
     branches: [android-estudiante-4.1.0]
@@ -41,19 +41,19 @@ jobs:
       - name: Instalar dependencias
         shell: pwsh
         run: npm install --no-audit --no-fund
-      - name: Construir EXE portable
+      - name: Construir EXE portable reparado
         shell: pwsh
         run: npm run dist:win
       - name: Verificar ejecutable
         shell: pwsh
         run: |
-          $exe = "dist/Matematicas_vs_Zombis_ESTUDIANTE_4.1.5_WINDOWS_x64_PORTABLE.exe"
+          $exe = "dist/Matematicas_vs_Zombis_ESTUDIANTE_4.1.6_WINDOWS_x64_REPARADO.exe"
           if (!(Test-Path $exe)) { throw "No se genero el ejecutable" }
           if ((Get-Item $exe).Length -lt 1000000) { throw "El ejecutable generado no es valido" }
           Get-FileHash $exe -Algorithm SHA256
       - uses: actions/upload-artifact@v4
         with:
-          name: Matematicas_vs_Zombis_ESTUDIANTE_4.1.5_WINDOWS_x64_PORTABLE
-          path: dist/Matematicas_vs_Zombis_ESTUDIANTE_4.1.5_WINDOWS_x64_PORTABLE.exe
+          name: Matematicas_vs_Zombis_ESTUDIANTE_4.1.6_WINDOWS_x64_REPARADO
+          path: dist/Matematicas_vs_Zombis_ESTUDIANTE_4.1.6_WINDOWS_x64_REPARADO.exe
           if-no-files-found: error
           retention-days: 30
