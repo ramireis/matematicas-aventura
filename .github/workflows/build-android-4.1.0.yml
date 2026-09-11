@@ -1,4 +1,4 @@
-name: Construir Android 4.1.5 y Windows 4.2.1
+name: Construir Android 4.1.5 y Windows 4.3.0
 on:
   push:
     branches: [android-estudiante-4.1.0]
@@ -47,13 +47,13 @@ jobs:
       - name: Verificar ejecutable
         shell: pwsh
         run: |
-          $exe = "dist/Matematicas_vs_Zombis_ESTUDIANTE_4.2.1_WINDOWS_UN_SOLO_ARCHIVO.exe"
+          $exe = "dist/Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_WINDOWS_LIMPIO_DOCENTE_QR.exe"
           if (!(Test-Path $exe)) { throw "No se genero el ejecutable" }
           if ((Get-Item $exe).Length -lt 50000000) { throw "El ejecutable esta incompleto" }
           Get-FileHash $exe -Algorithm SHA256
       - uses: actions/upload-artifact@v4
         with:
-          name: Matematicas_vs_Zombis_ESTUDIANTE_4.2.1_WINDOWS_UN_SOLO_ARCHIVO
-          path: dist/Matematicas_vs_Zombis_ESTUDIANTE_4.2.1_WINDOWS_UN_SOLO_ARCHIVO.exe
+          name: Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_WINDOWS_LIMPIO_DOCENTE_QR
+          path: dist/Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_WINDOWS_LIMPIO_DOCENTE_QR.exe
           if-no-files-found: error
           retention-days: 30
