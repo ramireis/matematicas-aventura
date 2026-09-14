@@ -1,4 +1,4 @@
-name: Construir Android 4.3.0 y Windows 4.3.0
+name: Construir Android 4.3.1 y Windows 4.3.1
 on:
   push:
     branches: [android-estudiante-4.1.0]
@@ -22,11 +22,11 @@ jobs:
       - name: Compilar APK instalable
         run: gradle :app:assembleDebug --stacktrace
       - name: Renombrar entrega
-        run: cp app/build/outputs/apk/debug/app-debug.apk Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_ANDROID_LIMPIO_DOCENTE_QR.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk Matematicas_vs_Zombis_ESTUDIANTE_4.3.1_ANDROID_LIMPIO_DOCENTE_QR.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_ANDROID_LIMPIO_DOCENTE_QR
-          path: Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_ANDROID_LIMPIO_DOCENTE_QR.apk
+          name: Matematicas_vs_Zombis_ESTUDIANTE_4.3.1_ANDROID_LIMPIO_DOCENTE_QR
+          path: Matematicas_vs_Zombis_ESTUDIANTE_4.3.1_ANDROID_LIMPIO_DOCENTE_QR.apk
           if-no-files-found: error
           retention-days: 30
 
@@ -47,13 +47,13 @@ jobs:
       - name: Verificar ejecutable
         shell: pwsh
         run: |
-          $exe = "dist/Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_WINDOWS_LIMPIO_DOCENTE_QR.exe"
+          $exe = "dist/Matematicas_vs_Zombis_ESTUDIANTE_4.3.1_WINDOWS_LIMPIO_DOCENTE_QR.exe"
           if (!(Test-Path $exe)) { throw "No se genero el ejecutable" }
           if ((Get-Item $exe).Length -lt 50000000) { throw "El ejecutable esta incompleto" }
           Get-FileHash $exe -Algorithm SHA256
       - uses: actions/upload-artifact@v4
         with:
-          name: Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_WINDOWS_LIMPIO_DOCENTE_QR
-          path: dist/Matematicas_vs_Zombis_ESTUDIANTE_4.3.0_WINDOWS_LIMPIO_DOCENTE_QR.exe
+          name: Matematicas_vs_Zombis_ESTUDIANTE_4.3.1_WINDOWS_LIMPIO_DOCENTE_QR
+          path: dist/Matematicas_vs_Zombis_ESTUDIANTE_4.3.1_WINDOWS_LIMPIO_DOCENTE_QR.exe
           if-no-files-found: error
           retention-days: 30
