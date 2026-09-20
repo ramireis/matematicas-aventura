@@ -1,0 +1,6 @@
+edufusion-lumi/
+├── index.html
+├── main.js
+├── package.json
+└── assets/
+    └── lumi_arte_aventura.png
