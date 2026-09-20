@@ -33,6 +33,9 @@ jobs:
       - name: Generate Android project
         working-directory: edufusion-lumi
         run: npx cap add android
+      - name: Configure Android native speech only
+        working-directory: edufusion-lumi
+        run: python3 android-native-voice.py
       - name: Build debug APK
         working-directory: edufusion-lumi/android
         run: bash ./gradlew assembleDebug --no-daemon
