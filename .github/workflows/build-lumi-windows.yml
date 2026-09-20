@@ -1,5 +1,6 @@
 name: Construir Lumi EDUFUSION Windows
 
+# Compilacion remota de Lumi EDUFUSION 5.12
 on:
   workflow_dispatch:
   push:
