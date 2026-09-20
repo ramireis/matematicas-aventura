@@ -17,7 +17,10 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-      - uses: android-actions/setup-android@v3
+      - name: Verify preinstalled Android SDK
+        run: |
+          test -d "$ANDROID_HOME" || test -d "$ANDROID_SDK_ROOT"
+          java -version
       - name: Install app dependencies
         working-directory: edufusion-lumi
         run: npm install
