@@ -1,0 +1,1 @@
+const fs=require('fs');fs.mkdirSync('www',{recursive:true});fs.copyFileSync('index.html','www/index.html');fs.cpSync('assets','www/assets',{recursive:true});console.log('Recursos web preparados para Android');

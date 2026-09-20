@@ -1,0 +1,8 @@
+{
+  "appId": "ec.edu.edufusion.lumi",
+  "appName": "Lumi EDUFUSION",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

@@ -1,0 +1,233 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lumi EDUFUSIÓN · Aventura en el laberinto</title><style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:system-ui,Arial;background:#101b3c;color:white}button{cursor:pointer;font:inherit;font-weight:800;border:0}#app{height:100dvh;display:grid;grid-template-rows:52px minmax(0,1fr);gap:6px;padding:6px;background:linear-gradient(130deg,#19214d,#432a69)}header{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}h1{font-size:clamp(18px,2.4vw,32px);color:#ffdc53;text-shadow:2px 2px #7138b3;margin:0;white-space:nowrap}.stats{display:flex;gap:5px;flex-wrap:nowrap}.pill{background:#15234fdd;border:1px solid #7f9fd8;border-radius:11px;padding:7px;font-size:clamp(11px,1.2vw,17px);white-space:nowrap}.layout{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(275px,.75fr);gap:7px;min-height:0}.world{position:relative;overflow:hidden;border:3px solid #a5b9ff;border-radius:18px;background:#183c4b;min-height:0}canvas{width:100%;height:100%;display:block;touch-action:none}.overlay{position:absolute;left:8px;top:8px;background:#151c48c9;padding:7px 11px;border-radius:12px;font-size:clamp(11px,1.2vw,16px);pointer-events:none}.controls{position:absolute;bottom:9px;left:9px;display:grid;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(2,39px);gap:3px}.controls button{background:#e4edffb9;border:2px solid #8a9ac9;color:#243065;border-radius:11px;font-size:22px;touch-action:none}.controls button:first-child{grid-column:2}.controls button:nth-child(2){grid-column:1;grid-row:2}.controls button:nth-child(3){grid-column:2;grid-row:2}.controls button:nth-child(4){grid-column:3;grid-row:2}.mini{position:absolute;right:8px;top:8px;width:clamp(85px,16%,155px);height:clamp(85px,20%,130px);border:2px solid #e4d9ff;border-radius:11px;background:#142c37d9;pointer-events:none}.worldfoot{position:absolute;bottom:9px;right:8px;display:flex;gap:5px}.worldfoot button{background:#31235dcc;color:#fff;border:1px solid #ad9af9;border-radius:9px;padding:7px;font-size:12px}.panel{background:linear-gradient(#fff2d8,#f7d3a5);color:#33234b;border:4px solid #d2a66e;border-radius:20px;padding:clamp(7px,1.2vw,15px);display:flex;flex-direction:column;min-height:0;gap:clamp(4px,1vh,10px)}.panel h2{font-size:clamp(16px,2vw,25px);line-height:1.15;margin:0}.phase{font-size:clamp(10px,1vw,13px);color:#65416a;font-weight:800}.answers{display:grid;grid-template-rows:repeat(4,minmax(0,1fr));gap:clamp(3px,.7vh,8px);flex:1;min-height:0}.answers button{background:#fffaf0;color:#38284c;border:2px solid #e2b780;border-radius:14px;text-align:left;padding:4px 10px;font-size:clamp(12px,1.45vw,20px);min-height:0}.answers button.good{background:#a8f0b3;border-color:#328a4b}.answers button.bad{background:#ffb4b9;border-color:#b63843}.feedback{background:#e5c4fa;border:2px solid #a56bd7;border-radius:12px;padding:clamp(5px,.9vh,10px);font-size:clamp(11px,1.1vw,15px);min-height:42px}.next{background:linear-gradient(#ad6eff,#6535d1);color:white;border-radius:14px;padding:clamp(8px,1.3vh,14px);font-size:clamp(13px,1.4vw,19px);box-shadow:0 3px #3a1d7e}.next:disabled{opacity:.45}.answers button:focus-visible{outline:4px solid #5735c6}.reward{position:absolute;left:50%;top:24%;transform:translate(-50%,-50%);font-size:clamp(26px,6vw,72px);font-weight:900;text-shadow:0 4px 9px #38215d;pointer-events:none;opacity:0;z-index:3}.reward.show{animation:rewardpop 2.3s ease forwards}@keyframes rewardpop{0%{opacity:0;transform:translate(-50%,-40%) scale(.4)}20%,75%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}100%{opacity:0;transform:translate(-50%,-80%) scale(.8)}}.paneltop{display:flex;justify-content:space-between;align-items:center;gap:5px}.sound{background:#7046ba;color:#fff;border-radius:10px;padding:6px}.modal{position:fixed;inset:0;background:#0d1236e8;display:grid;place-items:center;padding:15px;z-index:10}.modal.hidden{display:none}.dialog{background:#fff1d6;color:#302147;border:5px solid #caa06c;border-radius:24px;max-width:570px;width:100%;padding:20px;text-align:center;max-height:95dvh;overflow:auto}.dialog h2{margin:4px}.dialog button{background:#7041cb;color:white;border-radius:12px;padding:12px;margin:5px}.dialog input{font:inherit;padding:10px;width:90%;border:2px solid #9677bc;border-radius:9px}.dialog p{line-height:1.35}#report{display:none;background:white;color:black;padding:20px}#report table{border-collapse:collapse;width:100%}#report td,#report th{border:1px solid #777;padding:5px}@media(max-width:650px){#app{grid-template-rows:40px minmax(0,1fr);padding:3px;gap:3px}.layout{grid-template-columns:minmax(0,1.1fr) minmax(165px,.9fr);gap:3px}h1{font-size:14px}.pill{font-size:9px;padding:4px}.stats .pill:nth-child(3){display:none}.panel{padding:5px;border-width:2px;border-radius:11px;gap:3px}.panel h2{font-size:13px}.answers button{font-size:11px;padding:2px 4px;border-radius:7px}.feedback{font-size:10px;padding:3px;min-height:33px}.next{font-size:11px;padding:6px}.controls{transform:scale(.75);transform-origin:bottom left}.worldfoot{bottom:4px;right:3px}.worldfoot button{font-size:9px;padding:4px}.mini{width:70px;height:70px}}@media print{#app,.modal{display:none!important}#report{display:block!important}body{overflow:visible}}
+#dialog .preview{width:100%;max-height:48vh;object-fit:contain;border-radius:12px;border:2px solid #b8a0f5}#sceneBanner{position:absolute;left:50%;top:12%;transform:translateX(-50%);padding:10px 18px;border-radius:18px;background:#25206adf;color:#fff;font-weight:900;pointer-events:none;opacity:0;transition:opacity .3s;z-index:5}#sceneBanner.on{opacity:1}.world{box-shadow:inset 0 0 50px #060d3288}.panel{box-shadow:inset 0 0 24px #ffffff88}.answers button:active{transform:scale(.98)}@media(max-height:600px){.panel{gap:2px}.panel h2{font-size:clamp(12px,1.6vw,18px)}.feedback{min-height:26px}.worldfoot button{padding:4px}}
+#game.board3d{transform:perspective(950px) rotateX(28deg) scale(.88);transform-origin:center 60%;border-radius:15px;box-shadow:0 25px 20px #080b2c99;transition:transform .55s} .world:has(.board3d){background:radial-gradient(ellipse at 50% 10%,#a4d7ff,#14283f 75%)}#countdown{position:fixed;inset:0;z-index:30;display:none;place-items:center;background:#151139d9;color:#fff;font-size:clamp(65px,17vw,180px);font-weight:1000;text-shadow:0 7px 0 #7136b5}#countdown.on{display:grid}#voiceStatus{font-size:11px;color:#60337c;font-weight:700} .worldfoot{flex-wrap:wrap;justify-content:flex-end;max-width:65%} @media(max-width:650px){.worldfoot{max-width:72%}.worldfoot button{font-size:8px;padding:3px}} 
+/* v5.8: tarjetas visuales con objetos dentro de un aro, no letras de conjuntos */
+.answers button.visual-option{display:flex;align-items:center;justify-content:center;padding:3px;min-height:0}
+.set-figure{display:inline-flex;align-items:center;justify-content:center;gap:clamp(3px,.45vw,8px);flex-wrap:wrap;border:3px solid #8753cb;border-radius:50%;min-width:90px;min-height:48px;max-width:100%;padding:4px 14px;background:radial-gradient(ellipse,#fff,#e5d9ff);box-shadow:0 3px 0 #b6a1e3;vertical-align:middle}
+.set-figure .object{font-size:clamp(22px,3vw,42px);line-height:1.05}.set-figure.empty{border-style:dashed}.set-figure.empty .object{font-size:clamp(17px,2vw,26px)}
+.set-figure.infinity{border-style:double;border-width:5px}.set-figure .more{font-size:clamp(18px,2vw,29px);font-weight:900;color:#6941a4}
+.question-figure{display:inline-flex;margin-left:8px;vertical-align:middle}.panel h2{display:block}.visual-label{font-size:clamp(10px,1vw,14px);font-weight:800;margin-right:6px}
+</style></head><body><div id="app"><header><h1>⭐ Lumi <span style="color:#9ddaff">EDUFUSIÓN</span></h1><div class="stats"><span class="pill" id="stars">⭐ 0</span><span class="pill" id="pets">🐾 0</span><span class="pill" id="stage">🌳 Jardín 1</span><span class="pill" id="progress">🎯 0/10</span></div></header><main class="layout"><section class="world"><canvas id="game" aria-label="Laberinto interactivo con Lumi y su mascota"></canvas><div class="overlay" id="worldname">🌳 Jardín de los conjuntos</div><canvas class="mini" id="map" width="150" height="130"></canvas><div id="sceneBanner" aria-live="polite"></div><div id="reward" class="reward" aria-live="polite"></div><div class="controls"><button data-dir="up" aria-label="Arriba">▲</button><button data-dir="left" aria-label="Izquierda">◀</button><button data-dir="down" aria-label="Abajo">▼</button><button data-dir="right" aria-label="Derecha">▶</button></div><div class="worldfoot"><button id="auto">👣 Avanzar al portal</button><button id="view">🧊 Tablero 3D</button><button id="pause">⏸ Pausar movimiento</button><button id="full">⛶ Pantalla</button></div></section><aside class="panel"><div class="paneltop"><span class="phase" id="phase">PRÁCTICA · 1 DE 10</span><button class="sound" id="sound" aria-label="Escuchar pregunta">🔊 Escuchar</button></div><div id="voiceStatus">🔊 La pregunta se narrará después del conteo</div><h2 id="question">¡Vamos a jugar!</h2><div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite">Lumi te espera. Escucha y toca una respuesta.</div><button class="next" id="next" disabled>Responder para continuar ➜</button></aside></main></div><div class="modal" id="modal"><div class="dialog" id="dialog"><h2>🌟 ¡Bienvenido al jardín mágico!</h2><p>¡Lumi y su perrito están dentro del laberinto! Sigue sus movimientos mientras resuelves los retos.</p><p>Ayuda a Lumi a recorrer el laberinto. Cada acierto regala una estrella y Lumi avanza ocho pasos. Cada error la hace retroceder cuatro pasos con una explicación. ¡Una mascota puede acompañarte!</p><p>El lector de Windows leerá las instrucciones, preguntas, respuestas y explicaciones. Comprueba el volumen de tu equipo. Usa las flechas del teclado o los botones. Responde 10 retos y supera una evaluación de 10 preguntas con 7 aciertos.</p><input id="student" placeholder="Nombre del estudiante (opcional)" maxlength="70"><br><button id="start">🎮 ¡Comenzar aventura!</button></div></div><section id="report"></section><div id="countdown" aria-live="assertive"></div><script>
+'use strict';
+const $=id=>document.getElementById(id), canvas=$('game'),ctx=canvas.getContext('2d'),mc=$('map').getContext('2d');
+const maps=[['111111111111111','100000010000001','101110010111101','101000000100001','101011110101101','100010000100001','111010110111101','100000100000001','101110101110101','100000000000001','111111111111111'],['111111111111111','100000000000001','101111011110101','100001000010001','111101110011101','100000000000001','101110111101101','101000000100001','101011110101101','100000000000001','111111111111111'],['111111111111111','100000010000001','101110010111101','100010000000001','110011110111101','100000000100001','101111010101101','100000010000001','101110111110101','100000000000001','111111111111111']];
+const themes=[['Jardín de los conjuntos','#315f48','#7ed2a0','#ba8c64'],['Castillo de los subconjuntos','#464d8c','#92a8e7','#a98cbd'],['Bosque de las estrellas','#265b66','#8fe2cc','#c2a176'],['Templo de las figuras','#795749','#ffcd8a','#a6c4cf'],['Jardín del arcoíris','#525c91','#dbb5ff','#b8a87b']];
+const items=[['perro','🐶'],['gato','🐱'],['autobús','🚌'],['pelota','⚽'],['manzana','🍎'],['flor','🌼'],['árbol','🌳'],['mariposa','🦋'],['estrella','⭐'],['pez','🐟'],['lápiz','✏️'],['libro','📘']];
+const banks=[
+{q:'¿Qué es un conjunto unitario?',a:['Tiene un elemento.','No tiene elementos.','Tiene muchos elementos.','Es un camino.'],ok:0,why:'Un conjunto unitario tiene exactamente un elemento.'},
+{q:'¿Cuál es un conjunto vacío?',a:['Una caja sin objetos.','Una caja con un perro.','Dos pelotas.','Tres flores.'],ok:0,why:'El conjunto vacío no tiene elementos.'},
+{q:'¿Cuál es un conjunto finito?',a:['Tres gatos.','Todos los números naturales.','Los números sin fin.','Una cantidad interminable.'],ok:0,why:'Un conjunto finito tiene una cantidad limitada de elementos.'},
+{q:'¿Cuál es un conjunto infinito?',a:['Los números naturales.','Dos perros.','Una manzana.','Cinco lápices.'],ok:0,why:'Los números naturales continúan sin terminar.'},
+{q:'¿Cuál es un subconjunto de {gato, perro, pez}?',a:['{gato, pez}','{autobús}','{flor, lápiz}','{árbol}'],ok:0,why:'Un subconjunto contiene solo elementos del conjunto original.'},
+{q:'¿Cuántos elementos tiene {perro, gato}?',a:['2','1','0','4'],ok:0,why:'Hay dos elementos: perro y gato.'},
+{q:'¿Cuál es un conjunto de animales?',a:['{perro, gato, pez}','{auto, autobús}','{libro, lápiz}','{mesa, silla}'],ok:0,why:'Perro, gato y pez son animales.'},
+{q:'¿Cuál es un conjunto de transportes?',a:['{auto, autobús}','{perro, gato}','{flor, árbol}','{libro, lápiz}'],ok:0,why:'Auto y autobús son medios de transporte.'},
+{q:'¿Qué conjunto tiene un solo elemento?',a:['{pelota}','{gato, perro}','{}','{flor, árbol, pez}'],ok:0,why:'{pelota} tiene un solo elemento.'},
+{q:'¿Qué conjunto tiene cero elementos?',a:['{}','{perro}','{gato, pez}','{auto, autobús}'],ok:0,why:'Las llaves vacías representan un conjunto vacío.'},
+{q:'¿Qué elementos pertenecen al conjunto de frutas?',a:['manzana y pera','gato y perro','auto y autobús','lápiz y libro'],ok:0,why:'La manzana y la pera son frutas.'},
+{q:'¿Cuál es un subconjunto de {1, 2, 3, 4}?',a:['{2, 4}','{5, 6}','{0, 7}','{8}'],ok:0,why:'2 y 4 pertenecen al conjunto original.'},
+{q:'Si A = {perro, gato}, ¿perro pertenece a A?',a:['Sí.','No.','Solo a veces.','No se puede saber.'],ok:0,why:'Perro aparece entre los elementos de A.'},
+{q:'Si A = {auto, autobús}, ¿gato pertenece a A?',a:['No.','Sí.','Es un transporte.','Es un subconjunto.'],ok:0,why:'Gato no es un elemento de A.'},
+{q:'¿Cuál es un conjunto de útiles escolares?',a:['{lápiz, libro}','{perro, pez}','{auto, gato}','{árbol, flor}'],ok:0,why:'Lápiz y libro son útiles escolares.'},
+{q:'¿Qué es el conjunto universo?',a:['El conjunto que contiene todos los elementos que estudiamos.','Un conjunto sin elementos.','Un solo objeto.','Una estrella.'],ok:0,why:'El universo reúne los elementos que se consideran en la actividad.'},
+{q:'En U = {gato, perro, pez}, ¿qué elemento está en U?',a:['pez','auto','flor','lápiz'],ok:0,why:'Pez es un elemento del conjunto universo indicado.'},
+{q:'¿Cuál es un subconjunto de {manzana, pera, uva}?',a:['{pera}','{perro}','{auto}','{lápiz}'],ok:0,why:'Pera pertenece al conjunto de frutas mostrado.'},
+{q:'¿Cuántos elementos hay en {}?',a:['0','1','2','3'],ok:0,why:'El conjunto vacío contiene cero elementos.'},
+{q:'¿Cuál tiene tres elementos?',a:['{perro, gato, pez}','{auto}','{}','{flor, árbol}'],ok:0,why:'Perro, gato y pez son tres elementos.'}
+];
+let evalPlan=[];
+const requiredEvaluation=[0,1,2,3,4,15]; // Unitario, vacío, finito, infinito, subconjunto y universo.
+function prepareEvaluation(){
+ // Alternancia: nunca se presentan dos preguntas obligatorias consecutivas cuando hay refuerzos disponibles.
+ const essentials=shuffle(requiredEvaluation), extras=shuffle(banks.map((_,i)=>i).filter(i=>!requiredEvaluation.includes(i))).slice(0,4);
+ evalPlan=[essentials[0],extras[0],essentials[1],essentials[2],extras[1],essentials[3],extras[2],essentials[4],extras[3],essentials[5]];
+ // Rotar el comienzo para variar el orden sin eliminar las seis categorías fundamentales.
+ const offset=rand(evalPlan.length);evalPlan=evalPlan.slice(offset).concat(evalPlan.slice(0,offset));
+}
+let mode='practice',count=0,evalCount=0,evalCorrect=0,stars=0,stage=0,pet=1,locked=false,answered=false,selected=-1,student='',history=[],used=[],q=null,opts=[],running=false,paused=false,walking=false,goal={x:13,y:9},player={x:1,y:1,tx:1,ty:1,step:0},dog={x:1,y:1,tx:1,ty:1,sad:false,waiting:false,following:true},dogTravel=[],particles=[],last=0;
+function rand(n){return Math.floor(Math.random()*n)}function shuffle(a){return [...a].sort(()=>Math.random()-.5)}function grid(){return maps[stage%maps.length]}function open(x,y){return grid()[y]&&grid()[y][x]==='0'}function pick(){if(mode==='evaluation'){if(evalPlan.length!==10)prepareEvaluation();return banks[evalPlan[evalCount]];}if(used.length===banks.length)used=[];let n;do{n=rand(banks.length)}while(used.includes(n));used.push(n);return banks[n]}
+function update(){ $('stars').textContent='⭐ '+stars;$('pets').textContent='🐾 '+pet;$('stage').textContent='🌳 Jardín '+(stage+1);$('progress').textContent='🎯 '+(mode==='practice'?count:evalCount)+'/10';$('worldname').textContent=['🌳','🏰','🌲','🏛️','🌈'][stage%5]+' '+themes[stage%5][0]+' · '+(pet?'🐶 mascota':'⭐ estrellas');}
+let audioEnabled=true,autoWalk=true,autoTick=0,feedbackUntil=0;let travel=[],travelGoal=false,travelBackward=false,trail=[[1,1]],voiceTurn=0,voiceNotice=false;function celebrate(message){let e=$("reward");e.textContent=message;e.classList.remove("show");void e.offsetWidth;e.classList.add("show")}// Lector del sistema: usa SpeechSynthesis, disponible en Edge y Chrome.
+const voiceAudio = new Audio();
+let selectedVoice = null;
+let speechRequest=0; let speakingUtterance=null;
+let speechAvailable = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+function chooseSpanishVoice(){
+  if(!speechAvailable)return null;
+  const voices=window.speechSynthesis.getVoices();
+  const spanish=voices.filter(v=>/^es([_-]|$)/i.test(v.lang));
+  const latin=spanish.filter(v=>/es[-_](MX|CO|EC|PE|US|CL|VE)/i.test(v.lang));
+  const pool=latin.length?latin:spanish;
+  selectedVoice=pool.find(v=>/female|mujer|helena|sabina|laura|paulina|monica|mónica|dalia|elena/i.test(v.name))||pool[0]||null;
+  return selectedVoice;
+}
+if(speechAvailable){
+  chooseSpanishVoice();
+  window.speechSynthesis.addEventListener?.('voiceschanged',chooseSpanishVoice);
+}
+function speak(t){
+  const msg=String(t);
+  $('feedback').setAttribute('aria-label',msg);
+  if(!speechAvailable){
+    $('voiceStatus').textContent='🔇 Este navegador no dispone de lector de voz. Prueba Microsoft Edge.';
+    return;
+  }
+  const request=++speechRequest;
+  window.speechSynthesis.cancel();
+  chooseSpanishVoice();
+  const utterance=new SpeechSynthesisUtterance(msg);
+  speakingUtterance=utterance;
+  utterance.lang=selectedVoice?.lang||'es-EC';
+  utterance.rate=0.83;
+  utterance.pitch=1.08;
+  utterance.volume=1;
+  if(selectedVoice)utterance.voice=selectedVoice;
+  utterance.onstart=()=>{$('voiceStatus').textContent='🔊 Leyendo en voz alta · '+(selectedVoice?.name||'voz del sistema');};
+  utterance.onerror=(event)=>{if(request!==speechRequest||event.error==='canceled'||event.error==='interrupted')return;$('voiceStatus').textContent='🔊 Voz no disponible. Pulsa Escuchar para reintentar.';};
+  utterance.onend=()=>{if(request===speechRequest){speakingUtterance=null;$('voiceStatus').textContent='🔊 Pulsa Escuchar para repetir';}};
+  window.speechSynthesis.speak(utterance);
+}
+// El banco mantiene las palabras para el narrador y la retroalimentación;
+// la pantalla presenta figuras grandes para evitar que niños de 7 años deban leer llaves y letras.
+const figureIcons={'perro':'🐶','gato':'🐱','pez':'🐟','pelota':'⚽','manzana':'🍎','pera':'🍐','uva':'🍇','flor':'🌼','árbol':'🌳','autobús':'🚌','auto':'🚗','libro':'📘','lápiz':'✏️','mesa':'🪑','silla':'🪑','1':'🍎','2':'🍐','3':'🍇','4':'🍌','5':'🐶','6':'🐱','0':'🌼','7':'🐟','8':'🚗'};
+function setFigure(text){
+ const raw=String(text).trim();
+ let parts=null;
+ if(raw==='{}'||raw==='∅')parts=[];
+ else if(/^\{[^{}]*\}$/.test(raw))parts=raw.slice(1,-1).split(',').map(v=>v.trim()).filter(Boolean);
+ else if(/^(?:una caja sin objetos|una caja vacía|un conjunto sin elementos|no tiene elementos)\.?$/i.test(raw))parts=[];
+ else if(/^(?:tres gatos|dos perros|dos pelotas|tres flores|cinco lápices|una manzana|una pelota|una caja con un perro)\.?$/i.test(raw)){
+   const match=raw.toLowerCase();const key=Object.keys(figureIcons).find(k=>match.includes(k))|| (match.includes('gatos')?'gato':match.includes('perros')?'perro':match.includes('pelotas')?'pelota':match.includes('flores')?'flor':'lápiz');
+   const count=match.startsWith('tres')?3:match.startsWith('dos')?2:match.startsWith('cinco')?5:1;parts=Array(count).fill(key);
+ }
+ else if(/^(?:manzana y pera|gato y perro|auto y autobús|lápiz y libro)$/i.test(raw))parts=raw.split(' y ').map(v=>v.trim());
+ else if(/^(?:los números naturales|todos los números naturales|los números sin fin|una cantidad interminable)$/i.test(raw))return '<span class="set-figure infinity" role="img" aria-label="Números que continúan sin terminar"><span class="object">🔢</span><span class="more">1 2 3 … ∞</span></span>';
+ if(parts===null)return null;
+ const icons=parts.map(k=>figureIcons[k.toLowerCase()]||'🔷').map(icon=>'<span class="object">'+icon+'</span>').join('');
+ return '<span class="set-figure '+(parts.length?'':'empty')+'" role="img" aria-label="'+(parts.length?parts.length+' figuras':'Conjunto vacío, sin figuras')+'">'+(icons||'<span class="object">📦 ∅</span>')+'</span>';
+}
+function questionWithFigures(question){return question.replace(/\{[^{}]*\}/g,term=>{let figure=setFigure(term);return figure?'<span class="question-figure">'+figure+'</span>':term;}).replace(/\b[AU]\s*=\s*(?=<span)/g,'');}
+function nextQuestion(){if(!speechAvailable){modal('<h2>🔊 Se necesita audio</h2><p>Abre el juego con Microsoft Edge y activa una voz en español en Windows. La evaluación requiere narración.</p><button onclick="closeModal();speak(&quot;Prueba de sonido&quot;)">🔊 Probar voz</button>');return;}answered=false;selected=-1;locked=false;q=pick();opts=shuffle(q.a.map((t,i)=>({t,correct:i===q.ok})));$('phase').textContent=mode==='practice'?'PRÁCTICA · '+(count+1)+' DE 10':'EVALUACIÓN · '+(evalCount+1)+' DE 10';$('question').innerHTML=questionWithFigures(q.q);$('answers').innerHTML='';opts.forEach((o,i)=>{let b=document.createElement('button');let figure=setFigure(o.t);if(figure){b.classList.add('visual-option');b.innerHTML='<span class="visual-label">'+(i+1)+'</span>'+figure;b.setAttribute('aria-label','Opción '+(i+1)+': '+o.t)}else{b.textContent=['🌟 ','🐾 ','🎈 ','✨ '][i]+o.t;}b.onclick=()=>answer(i);$('answers').append(b)});$('feedback').textContent='👂 Escucha la pregunta. Puedes pulsar 🔊 para repetirla.';$('next').disabled=true;$('next').textContent='Responder para continuar ➜';update();speak('Escucha la pregunta. '+q.q+' Opciones. '+opts.map((o,i)=>(i+1)+'. '+o.t).join('. ')+' Toca la respuesta que elijas.')}
+function classifyChoice(question,choice){
+ const t=String(choice).trim(), lower=t.toLowerCase(), prompt=question.q.toLowerCase();
+ if(t==='{}'||t==='∅'||/sin objetos|sin elementos|caja vacía/.test(lower))return 'conjunto vacío: tiene cero elementos';
+ const braces=t.match(/^\{([^{}]*)\}$/);
+ if(braces){const elements=braces[1].split(',').map(x=>x.trim()).filter(Boolean);
+  if(elements.length===0)return 'conjunto vacío: tiene cero elementos';
+  if(/subconjunto/.test(prompt)){const parent=question.q.match(/\{([^{}]+)\}/);if(parent){const universe=parent[1].split(',').map(x=>x.trim().toLowerCase());if(elements.every(x=>universe.includes(x.toLowerCase())))return 'subconjunto: todos sus elementos pertenecen al conjunto original';return 'no es un subconjunto: contiene elementos que no pertenecen al conjunto original';}}
+  if(elements.length===1)return 'conjunto unitario: tiene un elemento';
+  return 'conjunto finito: tiene '+elements.length+' elementos';
+ }
+ if(/números naturales|números sin fin|interminable/.test(lower))return 'conjunto infinito: no termina';
+ if(/universo/.test(prompt)&&/todos los elementos/.test(lower))return 'conjunto universo: reúne todos los elementos que estudiamos';
+ if(/un solo elemento|una manzana|una pelota|un perro/.test(lower))return 'conjunto unitario: tiene un elemento';
+ if(/tres gatos|dos perros|dos pelotas|tres flores|cinco lápices/.test(lower))return 'conjunto finito: podemos contar sus elementos';
+ if(/subconjunto/.test(prompt))return 'no es un subconjunto válido para este ejercicio';
+ return 'esta opción no representa la respuesta correcta para el tipo de conjunto solicitado';
+}
+function typeFeedback(question,choice,good){
+ const selected=classifyChoice(question,choice);
+ const correct=classifyChoice(question,question.a[question.ok]);
+ return (good?'Elegiste: ':'Elegiste: ')+choice+'. Es '+selected+'. '+(good?'¡Muy bien! ':'La respuesta correcta es: '+question.a[question.ok]+'. Es '+correct+'. ');
+}
+function pedagogicalBridge(question,good){
+ const sample=exampleFor(question);
+ return good?' Observa la opción verde y explica con tus palabras por qué corresponde. Reto de Lumi: busca otro ejemplo parecido.':' Observa la opción verde. '+sample+' Escucha otra vez la explicación, compara las opciones y prueba con un ejemplo de tu casa o escuela. Puedes pulsar Escuchar para repetir.';
+}
+function answer(i){if(answered||paused)return;answered=true;selected=i;let good=opts[i].correct;[...$('answers').children].forEach((b,j)=>{b.disabled=true;if(opts[j].correct)b.classList.add('good');if(j===i&&!good)b.classList.add('bad')});if(mode==='practice'){count++;if(good){stars++;dog.sad=false;queueWalk(8,false);if(stars===5)pet=2;if(stars===9)pet=3;walking=true;celebrate('⭐ ¡Estrella! '+(stars===5?'🐱':stars===9?'🐰':''));$('feedback').textContent='🌟 ¡Excelente! '+typeFeedback(q,opts[i].t,true)+' Ganaste una estrella. '+(stars===5?'¡Desbloqueaste un gatito! ':stars===9?'¡Un conejito se une! ':'')+q.why+pedagogicalBridge(q,true);}else{queueDogForward(4);celebrate('💜 Aprendamos');$('feedback').textContent='💜 '+typeFeedback(q,opts[i].t,false)+' Escucha la explicación y el ejemplo. '+q.why+' Ejemplo: '+exampleFor(q)+' El perrito avanza cuatro casillas, se pone triste y espera a Lumi. Responde bien para alcanzarlo.'+pedagogicalBridge(q,false)}history.push({tipo:'Práctica',numero:count,pregunta:q.q,respuesta:opts[i].t,correcta:q.a[q.ok],acierto:good});}else{evalCount++;if(good)evalCorrect++;if(good)celebrate('⭐ ¡Estrella!');else celebrate('💜 Aprendamos');$('feedback').textContent=(good?'🌟 ¡Correcto! Ganaste una estrella. ':'💜 Escucha la explicación y el ejemplo. ')+typeFeedback(q,opts[i].t,good)+q.why+(good?'':' Ejemplo: '+exampleFor(q))+pedagogicalBridge(q,good);if(good)stars++;history.push({tipo:'Evaluación',numero:evalCount,pregunta:q.q,respuesta:opts[i].t,correcta:q.a[q.ok],acierto:good});}particles=Array.from({length:good?20:5},()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,v:Math.random()*2+1}));feedbackUntil=Date.now()+Math.max(2200,travel.length*330+450);$('next').disabled=true;setTimeout(()=>{$('next').disabled=false},Math.max(2200,travel.length*330+450));$('next').textContent=mode==='practice'&&count===10?'📝 Ir a la evaluación ➜':mode==='evaluation'&&evalCount===10?'🏆 Ver resultados ➜':'🚪 Continuar aventura ➜';update();speak((good?'¡Muy bien! Ganaste una estrella. ':'Buen intento. Escucha la explicación y el ejemplo. ')+typeFeedback(q,opts[i].t,good)+q.why+(good?'':' Ejemplo: '+exampleFor(q))+pedagogicalBridge(q,good)+' '+(good?'Vamos a continuar.':'Ahora puedes continuar e intentarlo de nuevo en el siguiente reto.'))}
+function exampleFor(question){let t=question.q.toLowerCase();if(t.includes('unitario')||t.includes('solo elemento'))return 'Una caja con un perro tiene un solo elemento: perro.';if(t.includes('vacío')||t.includes('{}'))return 'Una caja sin juguetes es un conjunto vacío.';if(t.includes('subconjunto'))return 'Si tenemos perro y gato, el grupo que contiene solo perro es un subconjunto.';if(t.includes('infinito'))return 'Los números uno, dos, tres y así sin terminar forman un conjunto infinito.';if(t.includes('finito'))return 'Tres pelotas forman un conjunto finito porque podemos contarlas.';if(t.includes('universo')||t.includes(' u '))return 'Si el universo es perro, gato y pez, perro pertenece a ese universo.';return 'Mira la respuesta verde. Esa es la opción correcta: '+question.a[question.ok]+'.'}function modal(html){$('dialog').innerHTML=html;$('modal').classList.remove('hidden')}function closeModal(){$('modal').classList.add('hidden')}
+// Rompecabezas original, sin cuentas externas ni dependencia de conexión.
+let puzzleStep=0;
+const puzzleItems=[{icon:'📦',name:'vacío',explain:'La caja vacía tiene cero elementos. Es un conjunto vacío.'},{icon:'🐶',name:'unitario',explain:'Un perro es un solo elemento. Es un conjunto unitario.'},{icon:'🐶🐱🐰',name:'finito',explain:'Tres animales se pueden contar. Es un conjunto finito.'}];
+function puzzleIntro(){
+ puzzleStep=0;
+ modal('<h2>🧩 ¡Rompecabezas mágico!</h2><p>Antes de la evaluación, ayuda a Lumi a ordenar tres piezas. Escucha y toca las figuras.</p><div id="puzzleArea"></div><button id="puzzleHear" onclick="readPuzzle()">🔊 Escuchar de nuevo</button>');
+ drawPuzzle();
+}
+function readPuzzle(){let x=puzzleItems[puzzleStep];if(x)speak('Busca el conjunto '+x.name+'. Toca la figura correcta.');}
+function drawPuzzle(){
+ const area=$('puzzleArea');if(!area)return;
+ if(puzzleStep>=3){area.innerHTML='<h2>🌟 ¡Rompecabezas completo!</h2><p>Ahora empieza la evaluación narrada de diez preguntas. Seis preguntas identifican los conjuntos unitario, vacío, finito, infinito, universo y subconjunto.</p><button id="beginEvaluation" onclick="closeModal();nextQuestion()">▶ Comenzar evaluación</button>';speak('¡Fantástico! Completaste el rompecabezas. Ahora vamos a responder diez preguntas, incluidas seis para identificar los tipos de conjuntos. Necesitas siete aciertos para aprobar. Pulsa comenzar evaluación.');return;}
+ area.innerHTML='<p style="font-size:1.2rem">¿Cuál es el conjunto '+puzzleItems[puzzleStep].name+'?</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">'+puzzleItems.map((it,i)=>'<button style="font-size:2.2rem;min-width:95px;min-height:90px" onclick="choosePuzzle('+i+')" aria-label="Opción '+(i+1)+'">'+it.icon+'</button>').join('')+'</div><p id="puzzleFeedback" role="status"></p>';
+ readPuzzle();
+}
+function choosePuzzle(i){let target=puzzleItems[puzzleStep];if(i!==puzzleStep){$('puzzleFeedback').textContent='💜 '+puzzleItems[i].explain+' Intenta encontrar el conjunto '+target.name+'.';speak('Buen intento. '+puzzleItems[i].explain+' Busca el conjunto '+target.name+'.');return;}
+ $('puzzleFeedback').textContent='⭐ '+target.explain;speak('¡Muy bien! '+target.explain+' Ganaste una estrella.');stars++;update();puzzleStep++;setTimeout(drawPuzzle,2800);
+}
+function advance(){if(!answered||Date.now()<feedbackUntil)return;if(mode==='practice'&&count===10){mode='evaluation';evalCount=0;evalCorrect=0;used=[];prepareEvaluation();puzzleIntro();return}if(mode==='evaluation'&&evalCount===10){let pass=evalCorrect>=7;save();modal('<h2>'+(pass?'🏆 ¡Portal desbloqueado!':'💜 ¡Puedes intentarlo otra vez!')+'</h2><p>Tu nota: <strong>'+evalCorrect+'/10</strong>. '+(pass?'¡Excelente trabajo!':'Necesitas al menos 7 aciertos. Repasemos y vuelve a intentarlo.')+'</p><button onclick="printReport()">🖨️ Informe PDF / imprimir</button><button onclick="csv()">📊 Descargar resultados CSV</button><button onclick="restart('+pass+')">'+(pass?'🌈 Nueva aventura':'🔄 Repetir evaluación')+'</button>');return}nextQuestion()}
+function restart(pass){closeModal();if(pass){count=0;mode='practice';stage++;stars+=2;used=[]}else{evalCount=0;evalCorrect=0;used=[];mode='evaluation';prepareEvaluation()}nextQuestion()}
+function save(){try{localStorage.setItem('lumi_edufusion_report',JSON.stringify({student,stars,stage,evalCorrect,history}))}catch(e){}}
+function printReport(){let rows=history.map(h=>'<tr><td>'+h.tipo+'</td><td>'+h.numero+'</td><td>'+escapeHtml(h.pregunta)+'</td><td>'+escapeHtml(h.respuesta)+'</td><td>'+escapeHtml(h.correcta)+'</td><td>'+(h.acierto?'✓':'✗')+'</td></tr>').join('');$('report').innerHTML='<h1>EDUFUSIÓN · Informe de Lumi</h1><p>Estudiante: '+escapeHtml(student||'Sin nombre')+'</p><p>Evaluación: '+evalCorrect+'/10 · Aciertos de práctica: '+history.filter(h=>h.tipo==='Práctica'&&h.acierto).length+' · Estrellas: '+stars+'</p><table><tr><th>Tipo</th><th>N.º</th><th>Pregunta</th><th>Respuesta</th><th>Correcta</th><th>Resultado</th></tr>'+rows+'</table>';window.print()}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function csv(){let rows=[['Estudiante','Tipo','Número','Pregunta','Respuesta','Respuesta correcta','Acierto'],...history.map(h=>[student,h.tipo,h.numero,h.pregunta,h.respuesta,h.correcta,h.acierto?'Sí':'No'])];let text='\ufeff'+rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';')).join('\r\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8'}));a.download='Lumi_resultados.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function move(dx,dy){if(paused||!running||travel.length)return;autoWalk=false;let nx=player.tx+dx,ny=player.ty+dy;if(open(nx,ny)){player.tx=nx;player.ty=ny;player.step++;dogOnPlayerStep();trail.push([nx,ny]);if(trail.length>100)trail.shift();if(nx===goal.x&&ny===goal.y)arrive();}}
+function arrive(){stage++;let banner=$('sceneBanner');banner.textContent='🌈 ¡Nuevo escenario! '+themes[stage%5][0];banner.classList.add('on');setTimeout(()=>banner.classList.remove('on'),2600);player.x=1;player.y=1;player.tx=1;player.ty=1;dog.x=1;dog.y=1;dog.tx=1;dog.ty=1;dog.sad=false;dog.waiting=false;dog.following=true;dogTravel=[];trail=[[1,1]];goal=chooseGoal();celebrate('🌈 ¡Nuevo escenario!');$('feedback').textContent='🌈 Lumi llegó a la estrella y abrió un jardín diferente.';update();}
+function chooseGoal(){let m=grid(),queue=[[1,1]],seen=new Set(['1,1']),far=[1,1];for(let k=0;k<queue.length;k++){let [x,y]=queue[k];far=[x,y];for(let [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){let xx=x+dx,yy=y+dy,key=xx+','+yy;if(m[yy]&&m[yy][xx]==='0'&&!seen.has(key)){seen.add(key);queue.push([xx,yy]);}}}return {x:far[0],y:far[1]};}
+function queueWalk(steps,back){if(!back&&pet&&!dog.following&&!dogTravel.length){let rescue=routeTo(dog.tx,dog.ty);travel=rescue.concat(path(dog.tx,dog.ty).slice(0,steps));travelBackward=false;return;}travelBackward=back;travelGoal=!back;if(back){travel=[];for(let i=0;i<steps&&trail.length>1;i++){trail.pop();travel.push(trail[trail.length-1]);}if(!travel.length){let p=path();travel=p.slice(0,steps).reverse();}return;}let p=path();travel=p.slice(0,steps);if(p.length<=steps&&p.length>0)travelGoal=true;else travelGoal=false;}
+const dirs={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};document.querySelectorAll('[data-dir]').forEach(b=>{b.addEventListener('pointerdown',e=>{e.preventDefault();let d=dirs[b.dataset.dir];move(...d)})});window.addEventListener('keydown',e=>{let d={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'}[e.key];if(d){e.preventDefault();move(...dirs[d])}});
+function path(fromX=player.tx,fromY=player.ty){let q=[[Math.round(fromX),Math.round(fromY)]],seen=new Set([''+q[0]]),prev={};for(let k=0;k<q.length;k++){let [x,y]=q[k];if(x===goal.x&&y===goal.y)break;for(let [dx,dy] of Object.values(dirs)){let nx=x+dx,ny=y+dy,key=nx+','+ny;if(open(nx,ny)&&!seen.has(key)){seen.add(key);prev[key]=[x,y];q.push([nx,ny])}}}let cur=[goal.x,goal.y],steps=[];while(cur.join()!=[fromX,fromY].join()&&steps.length<200){steps.unshift(cur);cur=prev[cur.join()];if(!cur)return []}return steps}
+function routeTo(targetX,targetY){let q=[[player.tx,player.ty]],seen=new Set([player.tx+','+player.ty]),prev={};for(let k=0;k<q.length;k++){let [x,y]=q[k];if(x===targetX&&y===targetY)break;for(let [dx,dy] of Object.values(dirs)){let nx=x+dx,ny=y+dy,key=nx+','+ny;if(open(nx,ny)&&!seen.has(key)){seen.add(key);prev[key]=[x,y];q.push([nx,ny]);}}}let cur=[targetX,targetY],steps=[];while(cur.join()!=[player.tx,player.ty].join()&&steps.length<200){steps.unshift(cur);cur=prev[cur.join()];if(!cur)return [];}return steps;}
+// El perro tiene coordenadas y recorrido propios: solo él avanza cuatro casillas tras un error.
+function queueDogForward(steps){
+ if(!pet)pet=1;
+ dog.sad=true;dog.waiting=false;dog.following=false;
+ dogTravel=path(dog.tx,dog.ty).slice(0,steps);
+ if(!dogTravel.length)dog.waiting=true;
+ update();
+}
+function dogOnPlayerStep(){
+ if(dog.following){dog.tx=player.tx;dog.ty=player.ty;return;}
+ if(!dogTravel.length && player.tx===dog.tx && player.ty===dog.ty){
+  dog.following=true;dog.waiting=false;dog.sad=false;
+  celebrate('🐶 ¡Lumi alcanzó a su perrito! Ahora avanzan juntos.');
+ }
+}
+// Mascota dibujada con volumen, cuerpo, cuatro patas y cola animada; sin emoji plano.
+function drawPet(c,x,y,tile,time,kind){
+ const k=tile/48, wag=Math.sin(time/135)*8*k,step=Math.sin(time/115)*3*k;
+ c.save();c.translate(x,y);c.fillStyle='#101a2855';c.beginPath();c.ellipse(0,15*k,20*k,5*k,0,0,7);c.fill();
+ c.strokeStyle=kind===1?'#a66c3a':kind===2?'#777c99':'#eee6df';c.lineWidth=6*k;c.lineCap='round';
+ c.beginPath();c.moveTo(-13*k,-2*k);c.quadraticCurveTo(-25*k,-16*k,-20*k+wag,-23*k);c.stroke();
+ c.fillStyle=kind===1?'#986039':kind===2?'#7781a0':'#e6d9e7';
+ for(let side of [-1,1]){let lx=side*10*k;c.beginPath();c.roundRect(lx-3*k,4*k+side*step,7*k,12*k,3*k);c.fill();}
+ c.fillStyle=kind===1?'#c88b50':kind===2?'#a4b0d2':'#fff3f4';c.beginPath();c.ellipse(0,0,18*k,12*k,0,0,7);c.fill();
+ c.fillStyle=kind===1?'#e9b77e':kind===2?'#bbc8e8':'#fff8f6';c.beginPath();c.arc(13*k,-10*k,12*k,0,7);c.fill();
+ c.fillStyle=kind===1?'#784629':kind===2?'#687398':'#e6c4db';
+ for(let side of [-1,1]){c.beginPath();c.ellipse((13+side*8)*k,-19*k,4*k,kind===3?12*k:8*k,side*.3,0,7);c.fill();}
+ c.fillStyle='#201d30';c.beginPath();c.arc(17*k,-12*k,1.7*k,0,7);c.arc(24*k,-7*k,2*k,0,7);c.fill();if(kind===1&&dog.sad){c.strokeStyle='#315b8d';c.lineWidth=1.8*k;c.beginPath();c.moveTo(17*k,-8*k);c.quadraticCurveTo(20*k,-4*k,23*k,-8*k);c.stroke();c.fillStyle='#70c7ff';c.beginPath();c.ellipse(17*k,-5*k,1.6*k,3*k,0,0,7);c.fill();}
+ c.fillStyle='#f3d44b';c.beginPath();c.arc(9*k,1*k,2.5*k,0,7);c.fill();c.restore();
+}
+// Los personajes se renderizan dentro del canvas del laberinto, en sus coordenadas reales.
+const characterArt=new Image();characterArt.src='assets/lumi_arte_aventura.png';
+function drawCharacterArt(c,kind,x,y,tile,time){
+ const size=kind==='lumi'?tile*1.32:tile*1.13;
+ const separated=kind==='dog'&&(dog.sad||dogTravel.length>0||!dog.following||Math.hypot(player.x-dog.x,player.y-dog.y)>.35);
+ const joyful=kind==='dog'&&!separated;
+ const bob=Math.sin(time/170+(kind==='lumi'?0:1))*tile*.035;
+ c.save();c.translate(x,y+bob);
+ c.fillStyle='#101d3588';c.beginPath();c.ellipse(0,tile*.37,size*.44,tile*.10,0,0,Math.PI*2);c.fill();
+ if(characterArt.complete&&characterArt.naturalWidth){
+  // Retratos del arte original recortados y escalados al personaje móvil; nunca es un póster fijo.
+  const src=kind==='lumi'?[2,188,350,650]:[418,496,295,295];
+  c.save();c.beginPath();c.ellipse(0,-size*.10,size*.43,size*.55,0,0,Math.PI*2);c.clip();
+  c.drawImage(characterArt,...src,-size*.46,-size*.68,size*.92,size*1.16);c.restore();
+  c.strokeStyle=kind==='lumi'?'#4be6ff':'#ffcf63';c.lineWidth=Math.max(1.5,tile*.045);
+  c.beginPath();c.ellipse(0,-size*.10,size*.43,size*.55,0,0,Math.PI*2);c.stroke();
+ }else if(kind==='lumi'){
+  c.font=Math.max(14,tile*.7)+'px Arial';c.textAlign='center';c.fillText('👧',0,tile*.17);
+ }else{drawPet(c,0,0,tile*.72,time,1)}
+ if(kind==='dog'){
+  // La expresión acompaña al movimiento: feliz junto a Lumi, triste al separarse.
+  c.font=Math.max(15,tile*.43)+'px Arial';c.textAlign='center';
+  c.fillText(joyful?'💛':'💧',size*.30,-size*.48);
+  c.save();c.translate(size*.12,-size*.06);c.lineCap='round';c.lineWidth=Math.max(1.6,tile*.045);
+  c.strokeStyle=joyful?'#185f39':'#37466d';c.beginPath();
+  if(joyful){c.arc(0,0,size*.105,.12,Math.PI-.12,false);}else{c.arc(0,size*.105,size*.105,Math.PI+.12,2*Math.PI-.12,false);}
+  c.stroke();c.restore();
+ }
+ c.restore();
+}
+function draw(t){if(running&&!paused&&dogTravel.length&&t-autoTick>330){autoTick=t;let n=dogTravel.shift();dog.tx=n[0];dog.ty=n[1];if(!dogTravel.length)dog.waiting=true;}if(running&&!paused&&travel.length&&t-autoTick>330){autoTick=t;let n=travel.shift();player.tx=n[0];player.ty=n[1];player.step++;dogOnPlayerStep();if(!travelBackward){trail.push([n[0],n[1]]);if(trail.length>100)trail.shift();}if(!travel.length&&player.tx===goal.x&&player.ty===goal.y){arrive();}}let w=canvas.clientWidth,h=canvas.clientHeight,dpr=Math.min(devicePixelRatio||1,2);if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr)}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);let th=themes[stage%5];let sky=ctx.createLinearGradient(0,0,0,h);sky.addColorStop(0,'#79b8f3');sky.addColorStop(.43,th[2]);sky.addColorStop(1,th[1]);ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);ctx.fillStyle='#d5e8ff';for(let i=0;i<7;i++){let xx=(i*177+stage*37)%Math.max(w,1);ctx.beginPath();ctx.ellipse(xx,45+i%3*17,45,13,0,0,Math.PI*2);ctx.fill()}let m=grid(),tile=Math.min(w/16,h/12),ox=(w-15*tile)/2,oy=(h-11*tile)/2;ctx.fillStyle=th[1];ctx.fillRect(ox,oy,15*tile,11*tile);for(let y=0;y<11;y++)for(let x=0;x<15;x++){let px=ox+x*tile,py=oy+y*tile;if(m[y][x]==='1'){if(canvas.classList.contains('board3d')){let rise=tile*.53;ctx.fillStyle='#172c30';ctx.fillRect(px+tile*.08,py+tile*.12,tile*.94,tile*.92);ctx.fillStyle='#31584b';ctx.beginPath();ctx.moveTo(px+tile*.08,py+tile*.12);ctx.lineTo(px+tile*.08,py-rise);ctx.lineTo(px+tile*1.02,py-rise);ctx.lineTo(px+tile*1.02,py+tile*.12);ctx.closePath();ctx.fill();ctx.fillStyle='#183c32';ctx.beginPath();ctx.moveTo(px+tile*1.02,py-rise);ctx.lineTo(px+tile*1.16,py-rise+tile*.10);ctx.lineTo(px+tile*1.16,py+tile*.22);ctx.lineTo(px+tile*1.02,py+tile*.12);ctx.closePath();ctx.fill();ctx.fillStyle=th[2];ctx.fillRect(px+tile*.08,py-rise,tile*.94,tile*.22);ctx.fillStyle='#ffffff66';ctx.fillRect(px+tile*.1,py-rise+tile*.025,tile*.85,tile*.035);}else{ctx.fillStyle='#263b3c';ctx.fillRect(px+tile*.08,py+tile*.16,tile*.94,tile*.92);ctx.fillStyle=th[2];ctx.fillRect(px+tile*.06,py+tile*.03,tile*.9,tile*.73);ctx.fillStyle='#ffffff20';ctx.fillRect(px+tile*.09,py+tile*.06,tile*.78,tile*.1);ctx.fillStyle='#224b36';for(let j=0;j<3;j++){ctx.beginPath();ctx.arc(px+tile*(.22+j*.26),py+tile*.13,tile*.11,0,7);ctx.fill()}}}else{ctx.fillStyle=(x+y)%2?'#e5bf91':'#cfa87e';ctx.fillRect(px+tile*.04,py+tile*.04,tile*.92,tile*.92);ctx.strokeStyle='#a47d5a66';ctx.strokeRect(px+tile*.07,py+tile*.07,tile*.86,tile*.86);if((x*7+y*11+stage)%13===0){ctx.fillStyle='#64b765';ctx.beginPath();ctx.arc(px+tile*.7,py+tile*.22,tile*.1,0,7);ctx.fill()}}}let gx=ox+(goal.x+.5)*tile,gy=oy+(goal.y+.5)*tile;ctx.save();ctx.shadowColor='#25eaff';ctx.shadowBlur=22;ctx.strokeStyle='#30eaff';ctx.lineWidth=tile*.14;ctx.beginPath();ctx.ellipse(gx,gy,tile*.32,tile*.43,0,0,7);ctx.stroke();ctx.fillStyle='#4c28bb99';ctx.fill();ctx.restore();ctx.font=Math.max(12,tile*.42)+'px Arial';ctx.textAlign='center';ctx.fillText('⭐',gx,gy+tile*.12);player.x+=(player.tx-player.x)*Math.min(1,(t-last||16)/110);player.y+=(player.ty-player.y)*Math.min(1,(t-last||16)/110);let px=ox+(player.x+.5)*tile,py=oy+(player.y+.5)*tile,bob=Math.sin(t/135)*tile*.045;ctx.fillStyle='#241e4366';ctx.beginPath();ctx.ellipse(px,py+tile*.33,tile*.32,tile*.12,0,0,7);ctx.fill();drawCharacterArt(ctx,'lumi',px,py,tile,t);if(pet){dog.x+=(dog.tx-dog.x)*Math.min(1,(t-last||16)/110);dog.y+=(dog.ty-dog.y)*Math.min(1,(t-last||16)/110);let dx=ox+(dog.x+.5)*tile,dy=oy+(dog.y+.5)*tile;drawCharacterArt(ctx,'dog',dx,dy,tile,t);}if(stars){ctx.font=Math.max(11,tile*.4)+'px Arial';for(let i=0;i<Math.min(4,stars);i++)ctx.fillText('⭐',ox+(2+i*3)*tile,oy+(2+(i%2)*3)*tile)}for(let p of particles){ctx.fillStyle='#ffef7e';ctx.font='15px Arial';ctx.fillText('✦',p.x/dpr,p.y/dpr);p.y-=p.v; if(p.y<0)p.y=canvas.height}mc.clearRect(0,0,150,130);mc.fillStyle='#173629';mc.fillRect(0,0,150,130);for(let y=0;y<11;y++)for(let x=0;x<15;x++){mc.fillStyle=m[y][x]==='1'?'#315c48':'#d9c296';mc.fillRect(x*10,y*10,9,9)}mc.fillStyle='#ffdc31';mc.fillRect(goal.x*10,goal.y*10,9,9);mc.fillStyle='#ae46ff';mc.beginPath();mc.arc((player.x+.5)*10,(player.y+.5)*10,5,0,7);mc.fill();last=t;if(running)requestAnimationFrame(draw)}
+$('next').onclick=advance;$('sound').onclick=()=>speak(answered?$('feedback').textContent:q?'Escucha la pregunta. '+q.q+' Opciones. '+opts.map((o,i)=>(i+1)+'. '+o.t).join('. '):'¡Bienvenido a Lumi!');$('auto').onclick=()=>{let p=path();travel=p.slice(0,8);travelBackward=false;$('feedback').textContent='👣 Lumi avanza por el camino hacia la estrella.';};$('pause').onclick=()=>{paused=!paused;$('pause').textContent=paused?'▶ Seguir movimiento':'⏸ Pausar movimiento'};$('full').onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()};$('view').onclick=()=>{let on=canvas.classList.toggle('board3d');$('view').textContent=on?'🗺️ Tablero 2D':'🧱 Muros altos 3D'};$('start').onclick=async()=>{if(!speechAvailable){$('voiceStatus').textContent='🔇 Necesitas Microsoft Edge con lector de voz activado.';alert('Para jugar necesitas activar el lector de voz de Windows en Microsoft Edge.');return;}goal=chooseGoal();student=$('student').value.trim();closeModal();speechRequest++;window.speechSynthesis.cancel();$('voiceStatus').textContent='⏳ Preparando la primera pregunta...';let c=$('countdown');c.classList.add('on');for(let word of ['3','2','1','¡A JUGAR!']){c.textContent=word;await new Promise(resolve=>setTimeout(resolve,word==='¡A JUGAR!'?650:900));}c.classList.remove('on');running=true;nextQuestion();requestAnimationFrame(draw)};
+</script></body></html>
