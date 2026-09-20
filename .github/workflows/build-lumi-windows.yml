@@ -1,13 +1,10 @@
 name: Construir Lumi EDUFUSION Windows
-
-# Compilacion remota de Lumi EDUFUSION 5.12
 on:
   workflow_dispatch:
   push:
     paths:
       - 'edufusion-lumi/**'
       - '.github/workflows/build-lumi-windows.yml'
-
 jobs:
   construir-exe:
     runs-on: windows-latest
@@ -22,8 +19,11 @@ jobs:
         shell: pwsh
         run: |
           foreach ($archivo in @('edufusion-lumi/index.html', 'edufusion-lumi/main.js', 'edufusion-lumi/package.json')) {
-            if (-not (Test-Path $archivo)) { throw "Falta archivo real de Lumi: $archivo. Sube la carpeta edufusion-lumi antes de compilar." }
+            if (-not (Test-Path $archivo)) { throw "Falta archivo real de Lumi: $archivo." }
           }
+      - name: Corregir teclado y movimiento autonomo
+        working-directory: edufusion-lumi
+        run: python fix-autonomous.py
       - name: Instalar dependencias
         working-directory: edufusion-lumi
         run: npm install
