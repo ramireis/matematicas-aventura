@@ -1,0 +1,38 @@
+name: Construir Lumi EDUFUSION Android APK
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'edufusion-lumi/**'
+      - '.github/workflows/build-lumi-android.yml'
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+      - name: Install app dependencies
+        working-directory: edufusion-lumi
+        run: npm install
+      - name: Prepare web assets
+        working-directory: edufusion-lumi
+        run: node prepare-android.js
+      - name: Generate Android project
+        working-directory: edufusion-lumi
+        run: npx cap add android
+      - name: Build debug APK
+        working-directory: edufusion-lumi/android
+        run: bash ./gradlew assembleDebug --no-daemon
+      - name: Publish separate APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lumi-EDUFUSION-Android-APK
+          path: edufusion-lumi/android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
