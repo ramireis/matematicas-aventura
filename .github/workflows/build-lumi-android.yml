@@ -21,6 +21,9 @@ jobs:
         run: |
           test -d "$ANDROID_HOME" || test -d "$ANDROID_SDK_ROOT"
           java -version
+      - name: Fix student keyboard and autonomous Lumi
+        working-directory: edufusion-lumi
+        run: python3 fix-autonomous.py
       - name: Install app dependencies
         working-directory: edufusion-lumi
         run: npm install
