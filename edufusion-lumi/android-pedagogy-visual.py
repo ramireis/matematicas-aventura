@@ -6,8 +6,6 @@ web=root/'www/index.html'
 s=web.read_text(encoding='utf-8')
 old="function pick(){if(mode==='evaluation'){if(evalPlan.length!==10)prepareEvaluation();return banks[evalPlan[evalCount]];}if(used.length===banks.length)used=[];let n;do{n=rand(banks.length)}while(used.includes(n));used.push(n);return banks[n]}"
 assert s.count(old)==1, 'Question selection changed; inspect before modifying'
-# First ten practices explicitly introduce all six essential concepts before evaluation.
-# Additional items review counting and identifying concrete sets. No random omissions.
 new="""const introductoryPlan=[0,1,2,3,4,15,5,6,7,8];
 function pick(){
  if(mode==='evaluation'){if(evalPlan.length!==10)prepareEvaluation();return banks[evalPlan[evalCount]];}
@@ -16,7 +14,7 @@ function pick(){
  let n;do{n=rand(banks.length)}while(used.includes(n));used.push(n);return banks[n];
 }"""
 s=s.replace(old,new,1)
-assert s.count('</style>')==1
+assert '</style>' in s, 'No CSS style block found'
 css='''
 /* Android: visual-first, touch-friendly 7-year-old interface. */
 @media (orientation:landscape){
@@ -44,4 +42,4 @@ shutil.copyfile(web,packaged)
 p=packaged.read_text(encoding='utf-8')
 assert 'const introductoryPlan=[0,1,2,3,4,15,5,6,7,8]' in p
 assert 'Se necesita audio' not in p
-print('Verified: first ten practices cover unitary, empty, finite, infinite, subset, universe; visual answers use 2x2 grid')
+print('Verified: introductory sequence and visual 2x2 answer layout packaged')
