@@ -67,7 +67,7 @@ public class MainActivity extends BridgeActivity {
     private void say(String text) {
         if (text == null || text.trim().isEmpty()) return;
         if (!ready || voice == null) { pending = text; return; }
-        voice.speak(text, TextToSpeech.QUEUE_FLUSH, null, "lumi-voice");
+        voice.speak(text, TextToSpeech.QUEUE_FLUSH, null, "lumi-voice");  
     }
 
     @Override public void onDestroy() {
