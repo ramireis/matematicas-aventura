@@ -1,4 +1,4 @@
-"""Patch the actual Capacitor Android assets, native voice and landscape orientation."""
+"""Patch Android-only Capacitor assets, native voice, and landscape orientation."""
 from pathlib import Path
 import shutil
 
@@ -20,15 +20,22 @@ s = s.replace(needle, '''function speak(t){
 startup = "if(!speechAvailable){$('voiceStatus').textContent='🔇 Necesitas Microsoft Edge con lector de voz activado.';alert('Para jugar necesitas activar el lector de voz de Windows en Microsoft Edge.');return;}"
 assert s.count(startup) == 1, 'Startup audio gate changed'
 s = s.replace(startup, '', 1)
-# This second gate blocked EVERY question even when native Android TTS existed.
 start = s.index('function nextQuestion(){')
 end = s.index('answered=false;', start)
 question_prefix = s[start:end]
 assert 'Se necesita audio' in question_prefix and 'Microsoft Edge' in question_prefix, 'Question gate changed'
 s = s[:start] + 'function nextQuestion(){' + s[end:]
+# Android native speech is not the browser speechSynthesis API. Never call browser
+# voice selection when only AndroidSpeech exists: that crashed script evaluation
+# before the Start button click handler could be installed.
 s = s.replace("let speechAvailable = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;", "let speechAvailable = !!window.AndroidSpeech || ('speechSynthesis' in window && 'SpeechSynthesisUtterance' in window);", 1)
+s = s.replace('if(speechAvailable){\n  chooseSpanishVoice();\n  window.speechSynthesis.addEventListener?.(\'voiceschanged\',chooseSpanishVoice);\n}', "if(window.speechSynthesis && window.SpeechSynthesisUtterance){\n  chooseSpanishVoice();\n  window.speechSynthesis.addEventListener?.('voiceschanged',chooseSpanishVoice);\n}", 1)
+assert "if(window.speechSynthesis && window.SpeechSynthesisUtterance){" in s, 'Browser speech startup guard not applied'
 s = s.replace('speechRequest++;window.speechSynthesis.cancel();', 'speechRequest++;if(window.speechSynthesis)window.speechSynthesis.cancel();')
 s = s.replace('Prueba Microsoft Edge.', 'Revisa el motor de voz de Android.')
+# Make the welcome screen short and readable on a landscape phone.
+s = s.replace('<p>¡Lumi y su perrito están dentro del laberinto! Sigue sus movimientos mientras resuelves los retos.</p><p>Ayuda a Lumi a recorrer el laberinto. Cada acierto regala una estrella y Lumi avanza ocho pasos. Cada error la hace retroceder cuatro pasos con una explicación. ¡Una mascota puede acompañarte!</p><p>La aplicación narrará las instrucciones, preguntas, respuestas y explicaciones. Comprueba el volumen de tu equipo. Lumi se mueve de forma autónoma. Responde 10 retos y supera una evaluación de 10 preguntas con 7 aciertos.</p>', '<p>Escucha la pregunta y toca una respuesta. Lumi avanza con tus aciertos.</p>', 1)
+s = s.replace('🎮 ¡Comenzar aventura!', '▶ JUGAR', 1)
 assert 'Se necesita audio' not in s and 'Para jugar necesitas activar el lector de voz de Windows en Microsoft Edge.' not in s
 html.write_text(s, encoding='utf-8')
 
@@ -77,5 +84,6 @@ shutil.copyfile(html, packaged)
 p = packaged.read_text(encoding='utf-8')
 assert 'Se necesita audio' not in p and 'Microsoft Edge y activa una voz' not in p
 assert 'window.AndroidSpeech.speak(msg)' in p and 'if(!soundOn)' not in p
+assert "if(window.speechSynthesis && window.SpeechSynthesisUtterance){" in p
 assert 'android:screenOrientation="sensorLandscape"' in manifest.read_text(encoding='utf-8')
-print('Verified: packaged questions have no Windows audio gate, native voice and landscape orientation configured')
+print('Verified: Android start handler safe without browser speech, no Windows audio gate, native voice and landscape')
