@@ -6,7 +6,7 @@ root = Path(__file__).resolve().parent
 html = root / 'www/index.html'
 s = html.read_text(encoding='utf-8')
 needle = 'function speak(t){'
-assert s.count(needle) == 1, 'Speech function changed: refusing unsafe patch'
+assert s.count(needle) == 1, 'Speech functio  n changed: refusing unsafe patch'
 s = s.replace(needle, '''function speak(t){
   // Android TextToSpeech: independent of Microsoft Edge and browser voices.
   if(window.AndroidSpeech){
