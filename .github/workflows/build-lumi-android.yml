@@ -36,6 +36,9 @@ jobs:
       - name: Configure Android native speech only
         working-directory: edufusion-lumi
         run: python3 android-native-voice.py
+      - name: Fix Android landscape answer card layout
+        working-directory: edufusion-lumi
+        run: python3 android-layout-fix.py
       - name: Build debug APK
         working-directory: edufusion-lumi/android
         run: bash ./gradlew assembleDebug --no-daemon
