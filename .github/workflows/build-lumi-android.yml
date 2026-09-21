@@ -45,6 +45,9 @@ jobs:
       - name: Fix movement and add report controls
         working-directory: edufusion-lumi
         run: python3 android-progress-report-fix.py
+      - name: Ensure visual accessibility and all six set types before evaluation
+        working-directory: edufusion-lumi
+        run: python3 android-pedagogy-visual.py
       - name: Build debug APK
         working-directory: edufusion-lumi/android
         run: bash ./gradlew assembleDebug --no-daemon
