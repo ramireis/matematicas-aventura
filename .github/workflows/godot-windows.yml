@@ -1,0 +1,44 @@
+name: Godot 3D Windows EXE
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener repositorio
+        uses: actions/checkout@v4
+
+      - name: Extraer proyecto Godot ya subido
+        run: |
+          unzip -q Matematicas_vs_Zombis_Godot_3D_Base.zip
+          test -f Matematicas_vs_Zombis_Godot_3D/project.godot
+          test -f Matematicas_vs_Zombis_Godot_3D/export_presets.cfg
+
+      - name: Instalar Godot 4.3 y plantillas de exportación
+        run: |
+          curl -fL --retry 3 -o godot.zip https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
+          unzip -q godot.zip
+          chmod +x Godot_v4.3-stable_linux.x86_64
+          curl -fL --retry 3 -o templates.tpz https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.3.stable"
+          unzip -q templates.tpz
+          cp templates/* "$HOME/.local/share/godot/export_templates/4.3.stable/"
+
+      - name: Importar y exportar juego para Windows
+        run: |
+          mkdir -p output
+          ./Godot_v4.3-stable_linux.x86_64 --headless --path Matematicas_vs_Zombis_Godot_3D --import --quit
+          ./Godot_v4.3-stable_linux.x86_64 --headless --path Matematicas_vs_Zombis_Godot_3D --export-release "Windows Desktop" "$GITHUB_WORKSPACE/output/Matematicas_vs_Zombis_3D.exe"
+          test -s output/Matematicas_vs_Zombis_3D.exe
+
+      - name: Publicar EXE y recursos asociados
+        uses: actions/upload-artifact@v4
+        with:
+          name: Matematicas_vs_Zombis_3D_Windows
+          path: output/
+          if-no-files-found: error
