@@ -1,0 +1,71 @@
+name: Lumi V17 APK Android
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/lumi-v17-apk.yml'
+      - 'Lumi_V17_Examen_Dentro_Del_Juego*.zip'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-lumi-v17:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verificar y extraer exclusivamente Lumi V17
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import glob,zipfile,pathlib,hashlib
+          files=glob.glob('Lumi_V17_Examen_Dentro_Del_Juego*.zip')
+          assert files, 'No se encontro ZIP Lumi V17'
+          f=sorted(files)[-1]
+          with zipfile.ZipFile(f) as z:
+              assert z.testzip() is None, 'ZIP corrupto'
+              names=[n for n in z.namelist() if n.endswith('index.html')]
+              assert len(names)==1, 'Se requiere un unico index.html'
+              html=z.read(names[0])
+          assert len(html)>10000, 'HTML incompleto'
+          assert b'<!doctype html' in html.lower(), 'No es HTML valido'
+          pathlib.Path('app/src/main/assets/index.html').write_bytes(html)
+          print('Fuente V17:',f,'bytes:',len(html),'SHA256:',hashlib.sha256(html).hexdigest())
+          PY
+      - name: Personalizar aplicacion Lumi y ocultar barra ajena al juego
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('app/src/main/AndroidManifest.xml')
+          s=p.read_text()
+          s=s.replace('android:label="Misión Matemática ABJ"','android:label="Lumi V17 Conjuntos"')
+          s=s.replace('android:name=".MainActivity"','android:name=".MainActivity"\n            android:screenOrientation="landscape"')
+          p.write_text(s)
+          p=Path('app/src/main/java/ec/edu/misionmatematica/MainActivity.java')
+          s=p.read_text()
+          s=s.replace('root.addView(bar, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(52)));','// Lumi V17: usar toda la pantalla para la actividad; barra anterior omitida.')
+          p.write_text(s)
+          p=Path('app/build.gradle')
+          s=p.read_text().replace("versionName '1.0.0'","versionName '17.0.0'").replace('versionCode 1','versionCode 17')
+          p.write_text(s)
+          PY
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Compilar APK Android
+        run: gradle --no-daemon assembleDebug
+      - name: Verificar salida
+        run: |
+          test -s app/build/outputs/apk/debug/app-debug.apk
+          mkdir -p output
+          cp app/build/outputs/apk/debug/app-debug.apk output/Lumi_V17_Android.apk
+          ls -lh output/Lumi_V17_Android.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Lumi-V17-Android-APK
+          path: output/Lumi_V17_Android.apk
+          if-no-files-found: error
