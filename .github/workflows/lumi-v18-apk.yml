@@ -1,0 +1,70 @@
+name: Lumi V18 Android APK
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/lumi-v18-apk.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Preparar Lumi V18
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import glob,zipfile,pathlib,re
+          f=sorted(glob.glob('Lumi_V17_Examen_Dentro_Del_Juego*.zip'))[-1]
+          with zipfile.ZipFile(f) as z:
+              assert z.testzip() is None
+              html=z.read('index.html').decode('utf-8')
+          old="function say(text){if(!voice||!('speechSynthesis'in window))return;try{speechSynthesis.cancel();chooseVoice();let u=new SpeechSynthesisUtterance(text);u.lang=preferredVoice?.lang||'es-ES';if(preferredVoice)u.voice=preferredVoice;u.rate=.88;u.pitch=1.08;u.volume=1;speechSynthesis.speak(u);}catch(e){}}"
+          new="function say(text){if(!voice)return;try{if(window.AndroidLumi&&typeof window.AndroidLumi.speak==='function'){window.AndroidLumi.speak(String(text));return;}if(!('speechSynthesis'in window))return;speechSynthesis.cancel();chooseVoice();let u=new SpeechSynthesisUtterance(text);u.lang=preferredVoice?.lang||'es-US';if(preferredVoice)u.voice=preferredVoice;u.rate=.88;u.pitch=1.08;u.volume=1;speechSynthesis.speak(u);}catch(e){}}"
+          assert html.count(old)==1
+          html=html.replace(old,new)
+          old="b.addEventListener('dragstart',e=>{selected=i;e.dataTransfer.setData('text/plain',String(i));});$('bank').append(b);"
+          new="b.addEventListener('dblclick',e=>{e.preventDefault();addItem(i);});let lastTap=0;b.addEventListener('touchend',e=>{const now=Date.now();if(now-lastTap<450){e.preventDefault();addItem(i);lastTap=0;}else lastTap=now;},{passive:false});b.addEventListener('dragstart',e=>{selected=i;e.dataTransfer.setData('text/plain',String(i));});$('bank').append(b);"
+          assert html.count(old)==1
+          html=html.replace(old,new)
+          html=html.replace("if(!voice&&'speechSynthesis'in window)speechSynthesis.cancel();","if(!voice){if(window.AndroidLumi)window.AndroidLumi.stop();else if('speechSynthesis'in window)speechSynthesis.cancel();}")
+          html=html.replace("if('speechSynthesis'in window)speechSynthesis.cancel();clearIdleHint();","if(window.AndroidLumi)window.AndroidLumi.stop();else if('speechSynthesis'in window)speechSynthesis.cancel();clearIdleHint();")
+          pathlib.Path('app/src/main/assets/index.html').write_text(html,encoding='utf-8')
+          p=pathlib.Path('app/src/main/java/ec/edu/misionmatematica/MainActivity.java');s=p.read_text()
+          s=s.replace('import android.webkit.JavascriptInterface;','import android.webkit.JavascriptInterface;\nimport android.speech.tts.TextToSpeech;\nimport android.speech.tts.Voice;\nimport java.util.Locale;\nimport java.util.Set;')
+          s=s.replace('private WebView webView;','private WebView webView;\n    private TextToSpeech lumiTts;\n    private boolean ttsReady=false;')
+          s=s.replace('super.onCreate(state);','super.onCreate(state);\n        lumiTts=new TextToSpeech(this,status->{if(status==TextToSpeech.SUCCESS){Locale locale=Locale.forLanguageTag("es-US");int result=lumiTts.setLanguage(locale);if(result==TextToSpeech.LANG_MISSING_DATA||result==TextToSpeech.LANG_NOT_SUPPORTED)lumiTts.setLanguage(new Locale("es","MX"));Voice chosen=null;Set<Voice> voices=lumiTts.getVoices();if(voices!=null){for(Voice v:voices){String lang=v.getLocale().toLanguageTag();String name=v.getName().toLowerCase(Locale.ROOT);if(lang.startsWith("es-")&&(lang.equals("es-US")||lang.equals("es-MX")||lang.equals("es-CO")||lang.equals("es-EC"))&&(name.contains("female")||name.contains("mujer")||name.contains("femen")||name.contains("sabina")||name.contains("paulina"))){chosen=v;break;}}}if(chosen!=null)lumiTts.setVoice(chosen);lumiTts.setSpeechRate(0.88f);lumiTts.setPitch(1.08f);ttsReady=true;}});')
+          s=s.replace('webView.addJavascriptInterface(new AndroidBridge(), "AndroidBridge");','webView.addJavascriptInterface(new AndroidBridge(), "AndroidBridge");\n        webView.addJavascriptInterface(new LumiSpeechBridge(), "AndroidLumi");')
+          marker='    public class AndroidBridge {'
+          assert marker in s
+          s=s.replace(marker,'    public class LumiSpeechBridge {\n        @JavascriptInterface public void speak(String text){runOnUiThread(()->{if(ttsReady&&lumiTts!=null)lumiTts.speak(text,TextToSpeech.QUEUE_FLUSH,null,"lumi-v18");});}\n        @JavascriptInterface public void stop(){runOnUiThread(()->{if(lumiTts!=null)lumiTts.stop();});}\n    }\n    @Override protected void onDestroy(){if(lumiTts!=null){lumiTts.stop();lumiTts.shutdown();}if(webView!=null)webView.destroy();super.onDestroy();}\n'+marker)
+          s=s.replace('root.addView(bar, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(52)));','// Lumi fullscreen: no extra toolbar')
+          p.write_text(s)
+          p=pathlib.Path('app/src/main/AndroidManifest.xml');s=p.read_text().replace('android:label="Misión Matemática ABJ"','android:label="Lumi V18 Conjuntos"').replace('android:name=".MainActivity"','android:name=".MainActivity" android:screenOrientation="landscape"');p.write_text(s)
+          p=pathlib.Path('app/build.gradle');s=p.read_text().replace('versionCode 1','versionCode 18').replace("versionName '1.0.0'","versionName '18.0.0'");p.write_text(s)
+          print('Lumi V18: Android TTS bridge and double tap applied')
+          PY
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Instalar Android SDK
+        run: |
+          echo "y" | ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --licenses >/dev/null || true
+          ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - name: Compilar APK
+        run: gradle --no-daemon assembleDebug
+      - name: Publicar APK
+        run: |
+          mkdir -p output
+          cp app/build/outputs/apk/debug/app-debug.apk output/Lumi_V18_Android.apk
+          test -s output/Lumi_V18_Android.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Lumi-V18-Android-APK
+          path: output/Lumi_V18_Android.apk
+          if-no-files-found: error
