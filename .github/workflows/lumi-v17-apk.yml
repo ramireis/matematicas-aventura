@@ -52,7 +52,21 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
+      - name: Usar Android SDK preinstalado y verificar plataforma
+        run: |
+          set -euo pipefail
+          echo "ANDROID_HOME=${ANDROID_HOME:-}"
+          echo "ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT:-}"
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          test -d "$SDK" || { echo 'No se encuentra Android SDK en el runner'; exit 1; }
+          echo "sdk.dir=$SDK" > local.properties
+          ls -la "$SDK/platforms" || true
+          if [ ! -d "$SDK/platforms/android-35" ]; then
+            SDKMANAGER=$(find "$SDK/cmdline-tools" -type f -name sdkmanager | head -n 1)
+            test -n "$SDKMANAGER" || { echo 'Falta sdkmanager para instalar android-35'; exit 1; }
+            yes | "$SDKMANAGER" --sdk_root="$SDK" --licenses >/dev/null || true
+            "$SDKMANAGER" --sdk_root="$SDK" 'platforms;android-35' 'build-tools;35.0.0'
+          fi
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
