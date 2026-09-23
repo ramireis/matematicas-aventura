@@ -1,0 +1,60 @@
+name: Compilar Zombis TPS V4 Windows
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'Zombis_TPS_V4_Kit_Compilacion_Segura.zip'
+      - '.github/workflows/zombis-tps-v4-windows.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extraer proyecto V4 aprobado
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf Matematicas_vs_Zombis_Godot_3D
+          unzip -q Zombis_TPS_V4_Kit_Compilacion_Segura.zip
+          test -f Matematicas_vs_Zombis_Godot_3D/project.godot
+          test -f Matematicas_vs_Zombis_Godot_3D/main.gd
+          test -f Matematicas_vs_Zombis_Godot_3D/data/banco_400.json
+
+      - name: Instalar Godot 4.3 y plantillas oficiales
+        shell: bash
+        run: |
+          set -euo pipefail
+          wget -q https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
+          unzip -q Godot_v4.3-stable_linux.x86_64.zip
+          chmod +x Godot_v4.3-stable_linux.x86_64
+          wget -q https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.3.stable"
+          unzip -q Godot_v4.3-stable_export_templates.tpz
+          cp templates/* "$HOME/.local/share/godot/export_templates/4.3.stable/"
+
+      - name: Importar y validar proyecto
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./Godot_v4.3-stable_linux.x86_64 --headless --path Matematicas_vs_Zombis_Godot_3D --import --quit
+
+      - name: Exportar Windows 64 bits
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p output
+          ./Godot_v4.3-stable_linux.x86_64 --headless --path Matematicas_vs_Zombis_Godot_3D --export-release "Windows Desktop" "$GITHUB_WORKSPACE/output/Matematicas_vs_Zombis_TPS_V4.exe"
+          test -s output/Matematicas_vs_Zombis_TPS_V4.exe
+          if [ -f output/Matematicas_vs_Zombis_TPS_V4.pck ]; then test -s output/Matematicas_vs_Zombis_TPS_V4.pck; fi
+          ls -lah output
+
+      - name: Subir ejecutable
+        uses: actions/upload-artifact@v4
+        with:
+          name: Matematicas_vs_Zombis_TPS_V4_Windows
+          path: output/*
+          if-no-files-found: error
