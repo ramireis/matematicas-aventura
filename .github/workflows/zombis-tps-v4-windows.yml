@@ -3,26 +3,28 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'Zombis_TPS_V4_Kit_Compilacion_Segura.zip'
+      - 'build_support/zombis_v4_main_patch.gz.b64'
       - '.github/workflows/zombis-tps-v4-windows.yml'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - uses: actions/checkout@v4
 
-      - name: Extraer proyecto V4 aprobado
+      - name: Reconstruir V4 desde base verificada
         shell: bash
         run: |
           set -euo pipefail
           rm -rf Matematicas_vs_Zombis_Godot_3D
-          unzip -q Zombis_TPS_V4_Kit_Compilacion_Segura.zip
-          test -f Matematicas_vs_Zombis_Godot_3D/project.godot
+          unzip -q Matematicas_vs_Zombis_Godot_3D_Base.zip
           test -f Matematicas_vs_Zombis_Godot_3D/main.gd
-          test -f Matematicas_vs_Zombis_Godot_3D/data/banco_400.json
+          base64 -d build_support/zombis_v4_main_patch.gz.b64 | gzip -dc > /tmp/v4.patch
+          patch Matematicas_vs_Zombis_Godot_3D/main.gd < /tmp/v4.patch
+          sed -i 's/config\/name="Matemáticas vs. Zombis 3D - Base"/config\/name="Matemáticas vs. Zombis TPS - V4"/' Matematicas_vs_Zombis_Godot_3D/project.godot
+          grep -q 'window/size/resizable=true' Matematicas_vs_Zombis_Godot_3D/project.godot || sed -i '/window\/stretch\/mode="canvas_items"/a window/size/resizable=true' Matematicas_vs_Zombis_Godot_3D/project.godot
+          test "$(wc -c < Matematicas_vs_Zombis_Godot_3D/main.gd)" -eq 23636
+          test "$(wc -c < Matematicas_vs_Zombis_Godot_3D/data/banco_400.json)" -eq 144894
 
       - name: Instalar Godot 4.3 y plantillas oficiales
         shell: bash
@@ -37,10 +39,7 @@ jobs:
           cp templates/* "$HOME/.local/share/godot/export_templates/4.3.stable/"
 
       - name: Importar y validar proyecto
-        shell: bash
-        run: |
-          set -euo pipefail
-          ./Godot_v4.3-stable_linux.x86_64 --headless --path Matematicas_vs_Zombis_Godot_3D --import --quit
+        run: ./Godot_v4.3-stable_linux.x86_64 --headless --path Matematicas_vs_Zombis_Godot_3D --import --quit
 
       - name: Exportar Windows 64 bits
         shell: bash
@@ -49,7 +48,6 @@ jobs:
           mkdir -p output
           ./Godot_v4.3-stable_linux.x86_64 --headless --path Matematicas_vs_Zombis_Godot_3D --export-release "Windows Desktop" "$GITHUB_WORKSPACE/output/Matematicas_vs_Zombis_TPS_V4.exe"
           test -s output/Matematicas_vs_Zombis_TPS_V4.exe
-          if [ -f output/Matematicas_vs_Zombis_TPS_V4.pck ]; then test -s output/Matematicas_vs_Zombis_TPS_V4.pck; fi
           ls -lah output
 
       - name: Subir ejecutable
