@@ -1,0 +1,27 @@
+name: Compilar Guerra de Ecuaciones EXE
+on:
+  workflow_dispatch:
+  push:
+    branches: [guerra-ecuaciones-exe]
+    paths:
+      - "guerra-ecuaciones/**"
+      - "package.json"
+      - ".github/workflows/build-guerra-ecuaciones.yml"
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - name: Instalar dependencias
+        run: npm install
+      - name: Compilar EXE sin alterar el juego
+        run: npm run build:guerra
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Guerra-de-Ecuaciones-Windows
+          path: dist-guerra/*
+          if-no-files-found: error
