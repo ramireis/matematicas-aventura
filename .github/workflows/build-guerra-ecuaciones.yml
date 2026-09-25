@@ -41,6 +41,17 @@ jobs:
       - name: Instalar dependencias
         run: npm install
 
+      - name: Instalar Blender
+        shell: pwsh
+        run: choco install blender --no-progress -y
+
+      - name: Generar A1 Cometa GLB
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path "guerra-ecuaciones/assets/models/ships" -Force | Out-Null
+          blender --background --python "guerra-ecuaciones/tools/generate_a1_cometa.py" -- "guerra-ecuaciones/assets/models/ships/a1_cometa.glb"
+          if (-not (Test-Path "guerra-ecuaciones/assets/models/ships/a1_cometa.glb")) { throw "No se generó A1 Cometa" }
+
       - name: Preparar motor 3D local
         shell: pwsh
         run: |
