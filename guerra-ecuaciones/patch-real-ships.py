@@ -77,8 +77,7 @@ const geStyle=document.createElement("style");geStyle.textContent=`
 .ge-hangar-card{width:min(900px,92vw);padding:24px;border:1px solid #3bdcff;border-radius:22px;background:#071426;box-shadow:0 0 40px #00bfff55;text-align:center}
 .ge-ship-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.ge-ship-grid button{min-height:145px;border:1px solid #42dfff;border-radius:16px;background:linear-gradient(#102842,#07111f);color:white;font-size:20px;cursor:pointer}.ge-ship-grid button:hover{transform:translateY(-3px);box-shadow:0 0 22px #2bdcff88}.ge-ship-grid small{display:block;margin-top:12px;font-size:13px;color:#bdefff}
 `;document.head.appendChild(geStyle);
-selectRealShip(localStorage.getItem("ge_ship_m1")||"A1");
-setTimeout(openRealHangar,900);
+setTimeout(()=>{try{selectRealShip(localStorage.getItem("ge_ship_m1")||"A1");setTimeout(openRealHangar,250);}catch(err){console.warn("Hangar 3D pospuesto:",err);}},1800);
 '''
     s=s.replace(marker,marker+code)
 # Ctrl cambia la vista real del motor, además de conservar C como respaldo
