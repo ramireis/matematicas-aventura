@@ -5,13 +5,10 @@
   "main": "guerra-ecuaciones/main.js",
   "private": true,
   "scripts": {
-    "build:guerra": "electron-builder --win nsis portable --config guerra-ecuaciones/electron-builder.yml"
+    "build:guerra": "electron-builder --win nsis portable --config guerra-ecuaciones/electron-builder.yml --publish never"
   },
   "devDependencies": {
     "electron": "^38.1.0",
     "electron-builder": "^26.0.12"
-  },
-  "build": {
-    "publish": null
   }
 }
