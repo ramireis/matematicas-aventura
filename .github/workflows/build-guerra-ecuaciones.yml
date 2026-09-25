@@ -29,7 +29,8 @@ jobs:
           Copy-Item -LiteralPath $index.FullName -Destination "guerra-ecuaciones/www/index.html" -Force
           $backup = Get-ChildItem -Path $tmp -Filter "respaldo_2D*.html" -Recurse | Select-Object -First 1
           if ($backup) { Copy-Item -LiteralPath $backup.FullName -Destination "guerra-ecuaciones/www/respaldo_2D.html" -Force }
-          Copy-Item -LiteralPath "guerra-ecuaciones/v2-enhancements.js" -Destination "guerra-ecuaciones/www/v2-enhancements.js" -Force\n          python guerra-ecuaciones/patch-real-ships.py
+          Copy-Item -LiteralPath "guerra-ecuaciones/v2-enhancements.js" -Destination "guerra-ecuaciones/www/v2-enhancements.js" -Force
+          python guerra-ecuaciones/patch-real-ships.py
           $html = Get-Content -LiteralPath "guerra-ecuaciones/www/index.html" -Raw
           if ($html -notmatch "v2-enhancements.js") {
             $html = $html -replace "</body>", '<script src="v2-enhancements.js"></script></body>'
