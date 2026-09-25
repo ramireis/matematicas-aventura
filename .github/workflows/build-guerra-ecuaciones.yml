@@ -41,6 +41,18 @@ jobs:
       - name: Instalar dependencias
         run: npm install
 
+      - name: Preparar motor 3D local
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path "guerra-ecuaciones/www/vendor" -Force | Out-Null
+          Copy-Item "node_modules/three/build/three.module.js" "guerra-ecuaciones/www/vendor/three.module.js" -Force
+          Copy-Item "node_modules/three/examples/jsm/loaders/GLTFLoader.js" "guerra-ecuaciones/www/vendor/GLTFLoader.js" -Force
+          Copy-Item "guerra-ecuaciones/player-ship.js" "guerra-ecuaciones/www/player-ship.js" -Force
+          if (Test-Path "guerra-ecuaciones/assets") {
+            Copy-Item "guerra-ecuaciones/assets" "guerra-ecuaciones/www/assets" -Recurse -Force
+          }
+          Write-Host "Motor GLTF offline preparado. La integración se activará cuando exista a1_cometa.glb."
+
       - name: Compilar EXE
         run: npm run build:guerra
 
