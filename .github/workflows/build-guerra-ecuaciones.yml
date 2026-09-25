@@ -49,7 +49,9 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Path "guerra-ecuaciones/assets/models/ships" -Force | Out-Null
-          blender --background --python "guerra-ecuaciones/tools/generate_a1_cometa.py" -- "guerra-ecuaciones/assets/models/ships/a1_cometa.glb"
+          $blender = Get-ChildItem "C:\Program Files\Blender Foundation" -Filter blender.exe -Recurse | Select-Object -First 1 -ExpandProperty FullName
+          if (-not $blender) { throw "No se encontró blender.exe después de instalar Blender" }
+          & $blender --background --python "guerra-ecuaciones/tools/generate_a1_cometa.py" -- "guerra-ecuaciones/assets/models/ships/a1_cometa.glb"
           if (-not (Test-Path "guerra-ecuaciones/assets/models/ships/a1_cometa.glb")) { throw "No se generó A1 Cometa" }
 
       - name: Preparar motor 3D local
