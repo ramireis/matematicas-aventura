@@ -1,5 +1,6 @@
 import * as THREE from './vendor/three.module.js';
 import { GLTFLoader } from './vendor/GLTFLoader.js';
+import { getPalette } from './src/engine/effects/color_palette.js';
 
 export class PlayerShip {
   constructor(scene,{onFire=null}={}) {
@@ -23,7 +24,9 @@ export class PlayerShip {
           const mats=Array.isArray(n.material)?n.material:[n.material];
           mats.filter(Boolean).forEach(m=>{m.toneMapped=false;});
         });
-        this.scene.add(this.mesh); onLoaded?.(this.mesh); resolve(this.mesh);
+        this.scene.add(this.mesh);
+        this.applyPalette(getPalette('world1'));
+        onLoaded?.(this.mesh); resolve(this.mesh);
       },undefined,err=>{console.error('Error al cargar A1 Cometa:',err);reject(err);});
     });
   }
