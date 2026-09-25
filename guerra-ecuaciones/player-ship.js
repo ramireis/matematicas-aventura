@@ -27,6 +27,25 @@ export class PlayerShip {
       },undefined,err=>{console.error('Error al cargar A1 Cometa:',err);reject(err);});
     });
   }
+  applyPalette(palette){
+    if(!this.mesh || !palette)return;
+    this.mesh.traverse(node=>{
+      if(!node.isMesh || !node.material)return;
+      const mats=Array.isArray(node.material)?node.material:[node.material];
+      mats.forEach(material=>{
+        if(!material)return;
+        const name=material.name||"";
+        if(name.includes("Cockpit")){
+          if(material.emissive) material.emissive.setHex(palette.primary);
+          material.emissiveIntensity=3.0;
+        }
+        if(name.includes("Engine")){
+          if(material.emissive) material.emissive.setHex(palette.engine);
+          material.emissiveIntensity=4.0;
+        }
+      });
+    });
+  }
   update(dt){
     if(!this.mesh)return;
     const step=this.moveSpeed*Math.min(dt,0.05);
