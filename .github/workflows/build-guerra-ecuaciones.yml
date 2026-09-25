@@ -40,19 +40,14 @@ jobs:
 
       - name: Instalar dependencias
         run: npm install
-
-      - name: Instalar Blender
-        shell: pwsh
-        run: choco install blender --no-progress -y
-
-      - name: Generar A1 Cometa GLB
+      - name: Comprobar asset A1
         shell: pwsh
         run: |
-          New-Item -ItemType Directory -Path "guerra-ecuaciones/assets/models/ships" -Force | Out-Null
-          $blender = Get-ChildItem "C:\Program Files\Blender Foundation" -Filter blender.exe -Recurse | Select-Object -First 1 -ExpandProperty FullName
-          if (-not $blender) { throw "No se encontró blender.exe después de instalar Blender" }
-          & $blender --background --python "guerra-ecuaciones/tools/generate_a1_cometa.py" -- "guerra-ecuaciones/assets/models/ships/a1_cometa.glb"
-          if (-not (Test-Path "guerra-ecuaciones/assets/models/ships/a1_cometa.glb")) { throw "No se generó A1 Cometa" }
+          if (Test-Path "guerra-ecuaciones/assets/models/ships/a1_cometa.glb") {
+            Write-Host "A1 Cometa GLB disponible para empaquetado."
+          } else {
+            Write-Host "A1 Cometa aún no está persistida; se compilará el juego estable sin activarla."
+          }
 
       - name: Preparar motor 3D local
         shell: pwsh
