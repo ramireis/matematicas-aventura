@@ -10,7 +10,13 @@ export const WEAPON_COLORS = Object.freeze({
 
 const DEFAULT_POOL_SIZE = 40;
 const TRAIL_COUNT = 80;
-const MAX_BOLT_LIFE = 2.5;
+const WEAPON_LIFETIME = Object.freeze({
+  CANNON: 2.0,
+  MACHINE_GUN: 1.5,
+  MISSILE: 3.0,
+  FLARE: 2.5,
+  ROCKET: 3.5
+});
 const MAX_DISTANCE_SQ = 180 * 180;
 const _dir = new THREE.Vector3();
 
@@ -57,7 +63,9 @@ export class ParticleSystem {
     bolt.position.copy(position);
     _dir.copy(direction).normalize();
     bolt.userData.velocity.copy(_dir).multiplyScalar(this._speedFor(type));
-    bolt.userData.life = MAX_BOLT_LIFE;
+    bolt.userData.life = WEAPON_LIFETIME[type] || 2.0;
+    bolt.userData.maxLife = bolt.userData.life;
+    bolt.material.opacity = 1;
     bolt.userData.type = type;
     bolt.visible = true;
     this.activeBolts.push(bolt);
@@ -76,6 +84,7 @@ export class ParticleSystem {
     const bolt = this.activeBolts[index];
     bolt.visible = false;
     bolt.userData.life = 0;
+    bolt.material.opacity = 1;
     this.activeBolts.splice(index, 1);
     this.pool.push(bolt);
   }
@@ -124,6 +133,9 @@ export class ParticleSystem {
       const bolt = this.activeBolts[i];
       bolt.position.addScaledVector(bolt.userData.velocity, dt);
       bolt.userData.life -= dt;
+      if (bolt.userData.life < 0.3) {
+        bolt.material.opacity = Math.max(0, bolt.userData.life / 0.3);
+      }
       const tooFar = shipPosition
         ? bolt.position.distanceToSquared(shipPosition) > MAX_DISTANCE_SQ
         : false;
