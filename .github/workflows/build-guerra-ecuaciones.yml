@@ -1,0 +1,79 @@
+name: Compilar Guerra de Ecuaciones EXE
+on:
+  workflow_dispatch:
+  push:
+    branches: [guerra-ecuaciones-exe]
+    paths:
+      - "Guerra_Ecuaciones_Viajes_Entre_Galaxias (2).zip"
+      - "guerra-ecuaciones/**"
+      - "package.json"
+      - ".github/workflows/build-guerra-ecuaciones.yml"
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extraer juego sin modificarlo
+        shell: pwsh
+        run: |
+          $zip = "Guerra_Ecuaciones_Viajes_Entre_Galaxias (2).zip"
+          $tmp = Join-Path $env:RUNNER_TEMP "guerra-src"
+          if (Test-Path $tmp) { Remove-Item $tmp -Recurse -Force }
+          New-Item -ItemType Directory -Path $tmp | Out-Null
+          Expand-Archive -LiteralPath $zip -DestinationPath $tmp -Force
+          New-Item -ItemType Directory -Path "guerra-ecuaciones/www" -Force | Out-Null
+          $index = Get-ChildItem -Path $tmp -Filter "index*.html" -Recurse | Select-Object -First 1
+          if (-not $index) { throw "No se encontró index HTML dentro del ZIP" }
+          Copy-Item -LiteralPath $index.FullName -Destination "guerra-ecuaciones/www/index.html" -Force
+          $backup = Get-ChildItem -Path $tmp -Filter "respaldo_2D*.html" -Recurse | Select-Object -First 1
+          if ($backup) { Copy-Item -LiteralPath $backup.FullName -Destination "guerra-ecuaciones/www/respaldo_2D.html" -Force }
+          # MODO ESTABLE: usar el juego original extraído sin inyecciones externas.
+          # Las mejoras V2 quedan conservadas en el repositorio, pero no se cargan
+          # hasta aislar el bloqueo de la pantalla inicial.
+          Write-Host "Juego estable preparado:" $index.FullName
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Instalar dependencias
+        run: npm install
+      - name: Comprobar asset A1
+        shell: pwsh
+        run: |
+          if (Test-Path "guerra-ecuaciones/assets/models/ships/a1_cometa.glb") {
+            Write-Host "A1 Cometa GLB disponible para empaquetado."
+          } else {
+            Write-Host "A1 Cometa aún no está persistida; se compilará el juego estable sin activarla."
+          }
+
+      - name: Preparar motor 3D local
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path "guerra-ecuaciones/www/vendor" -Force | Out-Null
+          Copy-Item "node_modules/three/build/three.module.js" "guerra-ecuaciones/www/vendor/three.module.js" -Force
+          Copy-Item "node_modules/three/examples/jsm/loaders/GLTFLoader.js" "guerra-ecuaciones/www/vendor/GLTFLoader.js" -Force
+          Copy-Item "guerra-ecuaciones/player-ship.js" "guerra-ecuaciones/www/player-ship.js" -Force
+          Copy-Item "guerra-ecuaciones/src" "guerra-ecuaciones/www/src" -Recurse -Force
+          Copy-Item "guerra-ecuaciones/v2-runtime.js" "guerra-ecuaciones/www/v2-runtime.js" -Force
+          $html = Get-Content "guerra-ecuaciones/www/index.html" -Raw
+          if ($html -notmatch 'v2-runtime.js') {
+            $html = $html -replace '</body>', '<script type="module" src="./v2-runtime.js"></script></body>'
+            Set-Content "guerra-ecuaciones/www/index.html" $html -Encoding UTF8
+          }
+          if ((Get-Content "guerra-ecuaciones/www/index.html" -Raw) -notmatch 'v2-runtime.js') { throw "No se pudo activar V2 runtime" }
+          if (Test-Path "guerra-ecuaciones/assets") {
+            Copy-Item "guerra-ecuaciones/assets" "guerra-ecuaciones/www/assets" -Recurse -Force
+          }
+          Write-Host "Motor V2 integrado y activado sobre la base académica."
+
+      - name: Compilar EXE
+        run: npm run build:guerra
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Guerra-de-Ecuaciones-Windows
+          path: dist-guerra/*
+          if-no-files-found: error

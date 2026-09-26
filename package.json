@@ -1,0 +1,17 @@
+{
+  "name": "guerra-de-ecuaciones",
+  "version": "1.0.0",
+  "description": "Guerra de Ecuaciones 3D para Windows",
+  "main": "guerra-ecuaciones/main.js",
+  "private": true,
+  "scripts": {
+    "build:guerra": "electron-builder --win nsis portable --config guerra-ecuaciones/electron-builder.yml --publish never"
+  },
+  "devDependencies": {
+    "electron": "^38.1.0",
+    "electron-builder": "^26.0.12"
+  },
+  "dependencies": {
+    "three": "^0.180.0"
+  }
+}
