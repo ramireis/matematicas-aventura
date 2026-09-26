@@ -1,0 +1,15 @@
+{
+ "project":"Cazadores Matemáticos – 7mo EGB / Godot 4",
+ "policy":"Los PNG son recursos físicos obligatorios. Si falta cualquiera, el juego se detiene; prohibido sustituirlos por círculos, rectángulos, stick figures, low-poly o geometría plana.",
+ "required":["hero.png","demon_basic.png","demon_fast.png","demon_tank.png","demon_mage.png","guide_nezuko.png","master_rengoku.png"],
+ "prompts":{
+  "hero":"Cazador matemático anime cinematográfico de fantasía japonesa, katana, aura azul, cuerpo completo.",
+  "demon_basic":"Oni original con máscara ritual, aura púrpura, pose agresiva, cuerpo completo.",
+  "demon_fast":"Demonio ninja original atlético, energía violeta y sensación de velocidad.",
+  "demon_tank":"Oni original corpulento con gran maza y presencia pesada.",
+  "demon_mage":"Hechicera demoníaca original con orbes de energía magenta.",
+  "guide_nezuko":"Mentora original de estética anime de fantasía japonesa, expresión amable.",
+  "master_rengoku":"Maestro original de estética anime, energía de fuego, expresión motivadora."
+ },
+ "negative":"sin figuras geométricas sustitutas, sin low-poly, sin stick figures, sin pixel art, sin anatomía deformada"
+}
