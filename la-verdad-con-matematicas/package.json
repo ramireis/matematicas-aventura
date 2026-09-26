@@ -1,56 +1,9 @@
 {
-  "name": "la-verdad-con-matematicas",
-  "version": "1.0.0",
-  "description": "Juego educativo 3D 7mo EGB",
-  "main": "src/main_electron.js",
-  "scripts": {
-    "start": "electron .",
-    "build": "electron-builder --win nsis portable --publish never"
-  },
-  "dependencies": {
-    "three": "^0.180.0"
-  },
-  "devDependencies": {
-    "electron": "^38.1.0",
-    "electron-builder": "^26.0.12"
-  },
-  "build": {
-    "appId": "com.educacion.verdadmatematicas",
-    "productName": "La Verdad con Matematicas",
-    "directories": {
-      "output": "dist"
-    },
-    "files": [
-      "index.html",
-      "src/**/*",
-      "assets/**/*",
-      "node_modules/three/**/*",
-      "package.json"
-    ],
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        },
-        {
-          "target": "portable",
-          "arch": [
-            "x64"
-          ]
-        }
-      ]
-    },
-    "artifactName": "${productName}-${version}-${arch}.${ext}",
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "La Verdad con Matemáticas",
-      "runAfterFinish": true
-    }
-  }
+  "name":"cazadores-matematicos-7egb",
+  "version":"2.0.0",
+  "description":"Juego educativo 2D de Matemáticas para 7mo EGB",
+  "main":"src/main_electron.js",
+  "scripts":{"start":"electron .","build":"electron-builder --win nsis --x64 --publish never"},
+  "devDependencies":{"electron":"^38.1.0","electron-builder":"^26.0.12"},
+  "build":{"appId":"ec.edu.cazadoresmatematicos","productName":"Cazadores Matematicos 7mo EGB","directories":{"output":"dist"},"files":["index.html","src/**/*","assets/**/*","package.json"],"win":{"target":[{"target":"nsis","arch":["x64"]}]},"artifactName":"Cazadores-Matematicos-7mo-EGB-${version}-${arch}.${ext}","nsis":{"oneClick":false,"allowToChangeInstallationDirectory":true,"createDesktopShortcut":true,"createStartMenuShortcut":true,"shortcutName":"Cazadores Matemáticos 7mo EGB","runAfterFinish":true}}
 }
