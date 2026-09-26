@@ -1,0 +1,19 @@
+{
+  "project":"La Verdad con Matemáticas",
+  "assetPolicy":"embedded-offline-required",
+  "required":[
+    "assets/hero.png","assets/demon_basic.png","assets/demon_fast.png","assets/demon_tank.png",
+    "assets/demon_mage.png","assets/guide_nezuko.png","assets/master_rengoku.png"
+  ],
+  "artDirection":{
+    "hero":"Cazador matemático original, anime cinematográfico de fantasía japonesa, katana, aura azul, cuerpo completo, fondo transparente.",
+    "demon_basic":"Oni original de máscara ritual, aura púrpura, pose agresiva, cuerpo completo, fondo transparente.",
+    "demon_fast":"Demonio ninja original, atlético, energía violeta y sensación de velocidad, cuerpo completo, fondo transparente.",
+    "demon_tank":"Oni original corpulento con gran maza, presencia pesada, cuerpo completo, fondo transparente.",
+    "demon_mage":"Hechicera demoníaca original con orbes de energía magenta, cuerpo completo, fondo transparente.",
+    "guide_nezuko":"Mentora original de estética anime de fantasía japonesa, expresión amable, retrato PNG.",
+    "master_rengoku":"Maestro original de estética anime, energía de fuego, expresión motivadora, retrato PNG."
+  },
+  "negative":"sin figuras geométricas sustitutas, sin low-poly, sin stick figures, sin pixel art, sin anatomía deformada",
+  "note":"Este manifiesto conserva las especificaciones artísticas dentro del instalador; los PNG deben existir físicamente para renderizarse."
+}
