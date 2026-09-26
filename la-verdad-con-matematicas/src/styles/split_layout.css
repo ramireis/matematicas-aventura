@@ -5,18 +5,21 @@
 #game-panel{position:relative;background:#030916}#scene{height:calc(100% - 92px);position:relative;overflow:hidden;background:linear-gradient(#071b39 0 45%,#102a27 46% 100%)}#scene:before{content:"";position:absolute;inset:15% 0 35%;background:repeating-linear-gradient(88deg,transparent 0 5%,#092f2c 5.3% 6.5%,transparent 6.8% 10%);opacity:.9}.moon-small{position:absolute;right:10%;top:5%;width:110px;height:110px;border-radius:50%;background:#d9eeff;box-shadow:0 0 35px #8bcfff}.torii{position:absolute;left:47%;top:20%;width:190px;height:190px;border-left:18px solid #b71f29;border-right:18px solid #b71f29}.torii:before,.torii:after{content:"";position:absolute;background:#d52c32;left:-48px;width:250px;height:18px}.torii:before{top:0}.torii:after{top:35px}.lantern{position:absolute;background:#ffb32e;color:#8a1d00;padding:8px;border:5px solid #4a1a0a;box-shadow:0 0 30px #ff7a00}.l1{left:20%;top:43%}.l2{right:23%;top:37%}.fighter{position:absolute;bottom:12%;transition:left .12s}.hero{left:18%;width:120px;height:190px}.head{position:absolute;left:38px;width:52px;height:58px;border-radius:50%;background:#e6b28e;border:8px solid #34101b}.body{position:absolute;top:50px;width:120px;height:130px;border-radius:35px;background:repeating-conic-gradient(#0c4438 0 25%,#071512 0 50%) 0/38px 38px}.sword{position:absolute;left:90px;top:95px;width:150px;height:8px;background:#dfffff;transform:rotate(-25deg);box-shadow:0 0 14px #00dfff}.slash{position:absolute;width:190px;height:130px;border:10px solid #16dfff;border-left-color:transparent;border-radius:50%;left:60px;top:55px;opacity:0}.hero.attack .slash{animation:slash .45s}.demon{right:16%;width:140px;height:205px}.dhead{font-size:70px;text-align:center;position:relative;z-index:2}.dbody{width:130px;height:125px;border-radius:45px 45px 20px 20px;background:linear-gradient(#39214f,#15101f);border:3px solid #a749d4}.horn{position:absolute;width:18px;height:45px;background:#f1e5cf;top:0}.h1{left:32px;transform:rotate(-25deg)}.h2{right:32px;transform:rotate(25deg)}#enemy-hp{position:absolute;right:12%;top:16%;width:220px;height:16px;border:2px solid #fff;border-radius:9px;background:#280913}#enemy-hp span{display:block;width:100%;height:100%;background:#ff3156;border-radius:7px}#battle-message{position:absolute;bottom:3%;left:28%;background:#07131edb;border:1px solid #4ee8ff;border-radius:9px;padding:8px 14px}#skills{height:92px;display:flex;align-items:center;justify-content:center;gap:18px;background:#07101f;border-top:1px solid #22bfff}#skills button{width:105px;padding:7px}#skills small,#skills b{display:block}footer{height:54px;background:#08111f;border-top:1px solid #273d5d;display:flex;justify-content:space-around;align-items:center;font-size:13px}@keyframes slash{0%{opacity:0;transform:scale(.5) rotate(-30deg)}40%{opacity:1}100%{opacity:0;transform:scale(1.35) rotate(15deg)}}.modal{position:fixed;inset:0;background:#02050bd9;display:grid;place-items:center;z-index:20}.modal.hidden{display:none}.modal-card{width:min(620px,90vw);background:linear-gradient(#17213a,#080d18);border:2px solid #ffb52e;border-radius:18px;padding:28px;text-align:center;box-shadow:0 0 45px #ff5c22}.modal-card h2{font-size:36px;color:#ffd05b}.good{color:#55ff9a}.bad{color:#ff6680}
 #gameCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:6;pointer-events:none}.fighter{display:none!important}#asset-warning{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:15;max-width:70%;padding:14px 18px;border:2px solid #ff465c;border-radius:10px;background:#19060eea;color:#ffd8dd;font-weight:800;text-align:center}.hidden{display:none!important}
 
-/* Flujo 2 fases: combate a pantalla completa -> recuperación académica */
-#split{display:block;height:calc(100vh - 112px)}
-#game-panel,#activity-panel{width:100%;height:100%}
-#activity-panel{border-right:0;padding:24px 8%;overflow:auto}
-#scene{height:calc(100% - 92px)}
-#hero-hp,#enemy-hp{position:absolute;top:4%;width:250px;z-index:12;font-size:12px;font-weight:900}
-#hero-hp{left:4%}#enemy-hp{right:4%}
-#hero-hp>span,#enemy-hp>span{display:block;height:18px;border:2px solid #fff;border-radius:10px;background:#280913;overflow:hidden}
-#hero-hp i,#enemy-hp i{display:block;height:100%;width:100%;transition:width .25s}
+
+/* Layout maestro: 50% combate superior + 50% pedagogía inferior */
+#split{display:grid;grid-template-rows:50% 50%;grid-template-columns:1fr;height:calc(100vh - 112px)}
+#game-panel,#activity-panel{width:100%;height:100%;min-height:0}
+#game-panel{grid-row:1}
+#activity-panel{grid-row:2;border-right:0;border-top:2px solid #00dfff;padding:10px 5%;overflow:auto}
+#scene{height:calc(100% - 62px)}
+#skills{height:62px}
+#hero-hp,#enemy-hp{position:absolute;top:3%;width:230px;z-index:12;font-size:12px;font-weight:900}
+#hero-hp{left:3%}#enemy-hp{right:3%}
+#hero-hp>span,#enemy-hp>span{display:block;height:16px;border:2px solid #fff;border-radius:10px;background:#280913;overflow:hidden}
+#hero-hp i,#enemy-hp i{display:block;height:100%;width:100%;transition:width .2s}
 #hero-hp i{background:linear-gradient(90deg,#22d76f,#9dff69)}#enemy-hp i{background:linear-gradient(90deg,#ff8b32,#ff3156)}
 #hero-hp em,#enemy-hp em{font-style:normal}
 #enemy-hp{height:auto;background:none;border:0;border-radius:0}
-#enemy-hp span{width:100%;height:18px;background:#280913;border:2px solid #fff}
-#enemy-hp span i{border-radius:8px}
-.edu-actions{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:18px}.edu-actions button:disabled{opacity:.35;cursor:not-allowed}
+#enemy-hp span{width:100%;height:16px;background:#280913;border:2px solid #fff}
+.question-card{height:auto;min-height:100%;padding:12px}.question{font-size:25px;margin:12px 0}.feedback{margin-top:10px;min-height:48px;padding:9px}.edu-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}
+.edu-actions button:disabled{opacity:.35;cursor:not-allowed}
