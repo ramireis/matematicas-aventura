@@ -33,21 +33,16 @@ var current:Dictionary={}
 @onready var answer_buttons=[$Education/Answers/A,$Education/Answers/B,$Education/Answers/C,$Education/Answers/D]
 
 func _ready():
- if not _load_assets(): return
+ _load_assets()
  _build_bank()
  for i in 4: answer_buttons[i].pressed.connect(_answer.bind(i))
  _new_question()
  message.text="← → mover · ↓ esquivar · M saltar · ESPACIO atacar"
 
-func _load_assets()->bool:
- var missing=[]
- for k in REQUIRED:
-  if not ResourceLoader.exists(REQUIRED[k]): missing.append(REQUIRED[k])
- if missing.size()>0:
-  message.text="⚠ FALTAN PNG OBLIGATORIOS:\n"+("\n".join(missing))
-  set_process(false);set_process_input(false);return false
- hero.texture=load(REQUIRED.hero);enemy.texture=load(REQUIRED.basic)
- return true
+func _load_assets():
+ # Los recursos visuales son opcionales durante el arranque: el juego nunca se bloquea.
+ if ResourceLoader.exists(REQUIRED.hero): hero.texture=load(REQUIRED.hero)
+ if ResourceLoader.exists(REQUIRED.basic): enemy.texture=load(REQUIRED.basic)
 
 func _process(delta):
  if recovery_mode:return
