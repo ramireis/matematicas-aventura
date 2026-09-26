@@ -1,0 +1,34 @@
+name: Build Godot Cazadores Matematicos EXE
+on:
+  workflow_dispatch:
+  push:
+    branches: [la-verdad-con-matematicas]
+    paths:
+      - 'godot-cazadores-matematicos/**'
+      - '.github/workflows/build-godot-cazadores.yml'
+jobs:
+  export-windows:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare export templates
+        run: |
+          mkdir -p ~/.local/share/godot/export_templates
+          if [ -d /root/.local/share/godot/export_templates/4.4.stable ]; then
+            cp -r /root/.local/share/godot/export_templates/4.4.stable ~/.local/share/godot/export_templates/ || true
+          fi
+      - name: Import project
+        working-directory: godot-cazadores-matematicos
+        run: godot --headless --editor --quit
+      - name: Export Windows EXE
+        working-directory: godot-cazadores-matematicos
+        run: |
+          mkdir -p build
+          godot --headless --export-release "Windows Desktop" build/Cazadores-Matematicos-7mo-EGB.exe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Cazadores-Matematicos-Godot-Windows
+          path: godot-cazadores-matematicos/build/Cazadores-Matematicos-7mo-EGB.exe
+          if-no-files-found: error
