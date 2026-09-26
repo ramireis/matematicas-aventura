@@ -56,10 +56,18 @@ jobs:
           Copy-Item "node_modules/three/build/three.module.js" "guerra-ecuaciones/www/vendor/three.module.js" -Force
           Copy-Item "node_modules/three/examples/jsm/loaders/GLTFLoader.js" "guerra-ecuaciones/www/vendor/GLTFLoader.js" -Force
           Copy-Item "guerra-ecuaciones/player-ship.js" "guerra-ecuaciones/www/player-ship.js" -Force
+          Copy-Item "guerra-ecuaciones/src" "guerra-ecuaciones/www/src" -Recurse -Force
+          Copy-Item "guerra-ecuaciones/v2-runtime.js" "guerra-ecuaciones/www/v2-runtime.js" -Force
+          $html = Get-Content "guerra-ecuaciones/www/index.html" -Raw
+          if ($html -notmatch 'v2-runtime.js') {
+            $html = $html -replace '</body>', '<script type="module" src="./v2-runtime.js"></script></body>'
+            Set-Content "guerra-ecuaciones/www/index.html" $html -Encoding UTF8
+          }
+          if ((Get-Content "guerra-ecuaciones/www/index.html" -Raw) -notmatch 'v2-runtime.js') { throw "No se pudo activar V2 runtime" }
           if (Test-Path "guerra-ecuaciones/assets") {
             Copy-Item "guerra-ecuaciones/assets" "guerra-ecuaciones/www/assets" -Recurse -Force
           }
-          Write-Host "Motor GLTF offline preparado. La integración se activará cuando exista a1_cometa.glb."
+          Write-Host "Motor V2 integrado y activado sobre la base académica."
 
       - name: Compilar EXE
         run: npm run build:guerra
