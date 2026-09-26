@@ -69,6 +69,9 @@ func _load_optional_assets() -> void:
    enemy.texture = r2
  hero_ph.visible = hero.texture == null
  enemy_ph.visible = enemy.texture == null
+ if hero.texture == null or enemy.texture == null:
+  msg.text = "⚔ Entrenamiento listo · recursos visuales opcionales"
+
 
 func _process(delta: float) -> void:
  if recovery:
@@ -170,6 +173,9 @@ func _build_bank() -> void:
   bank.append({"q":"Completa: %d, %d, %d, %d, …"%[st,st+step,st+2*step,st+3*step],"a":nxt,"o":[nxt,nxt+step,nxt-1,nxt+1],"tip":"Observa cuánto aumenta cada término."})
 
 func _new_question() -> void:
+ if bank.is_empty():
+  question.text="Error interno: banco vacío"
+  return
  current=bank[rng.randi_range(0,bank.size()-1)]
  question.text=str(current.q)
  var opts: Array=current.o.duplicate()
