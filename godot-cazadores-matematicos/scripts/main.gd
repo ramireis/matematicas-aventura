@@ -1,6 +1,14 @@
 extends Control
 
-const ASSETS: Dictionary = {"hero":"res://assets/hero.png","basic":"res://assets/demon_basic.png"}
+const ASSETS: Dictionary = {
+ "hero":"res://assets/hero.png",
+ "basic":"res://assets/demon_basic.png",
+ "fast":"res://assets/demon_fast.png",
+ "tank":"res://assets/demon_tank.png",
+ "mage":"res://assets/demon_mage.png",
+ "guide":"res://assets/guide_nezuko.png",
+ "master":"res://assets/master_rengoku.png"
+}
 const HERO_DAMAGE: float = 100.0 / 12.0
 const ENEMY_DAMAGE: float = 100.0 / 14.0
 var hero_hp: float = 100.0
@@ -17,6 +25,11 @@ var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var recovery: bool = false
 var recovery_count: int = 0
 var recovery_ok: int = 0
+var activity_stars: int = 10
+var world_stars: int = 0
+var general_score: int = 0
+var final_score: int = 0
+var world_unlocked: bool = false
 
 @onready var battle: Control = $Battle
 @onready var hero: TextureRect = $Battle/Hero
@@ -43,7 +56,7 @@ func _ready() -> void:
  _new_question()
  _bars()
  msg.text = "← → mover · ↓ esquivar · M saltar · ESPACIO atacar"
- feedback.text = "💡 Selecciona A, B, C o D. La actividad funciona aunque falten los PNG."
+ feedback.text = "💡 Misión matemática activa · ACC · ERCA · Marzano · DUA"
 
 func _load_optional_assets() -> void:
  if ResourceLoader.exists(ASSETS.hero):
@@ -186,10 +199,15 @@ func _answer(i: int) -> void:
  if ok:
   hero_hp=min(100.0,hero_hp+10.0)
   _bars()
-  feedback.text="✅ Correcto · +10% vida · "+str(current.tip)
+  world_stars += activity_stars
+  activity_stars = 10
+  feedback.text="✅ Correcto · +10% vida · "+str(current.tip)+" · Progreso: %d/60 ⭐"%world_stars
+  if world_stars >= 60:
+   msg.text="🏆 60 estrellas logradas · Generales ≥7/10 y prueba ≥8/10 desbloquean el siguiente mundo"
   _new_question()
  else:
-  feedback.text="❌ Intenta otra vez · Pista DUA: "+str(current.tip)
+  activity_stars=max(0,activity_stars-2)
+  feedback.text="❌ Aún no · "+str(current.tip)+" · Actividad: %d/10 ⭐"%activity_stars
 
 func _bars() -> void:
  hero_bar.value=hero_hp
