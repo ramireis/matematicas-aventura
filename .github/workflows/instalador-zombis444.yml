@@ -1,0 +1,43 @@
+name: Instalador completo Zombis 4.4.4
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  instalador:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reconstruir y verificar ZIP portable
+        shell: pwsh
+        run: |
+          $folder = 'instaladores/zombis444'
+          $parts = @("$folder/portable.zip.part01", "$folder/portable.zip.part02")
+          foreach ($part in $parts) { if (!(Test-Path $part)) { throw "Falta $part" } }
+          $dest = [IO.File]::Create('portable.zip')
+          try {
+            foreach ($part in $parts) {
+              $src = [IO.File]::OpenRead($part)
+              try { $src.CopyTo($dest) } finally { $src.Dispose() }
+            }
+          } finally { $dest.Dispose() }
+          Expand-Archive 'portable.zip' -DestinationPath payload -Force
+          if (!(Test-Path 'payload/Matematicas vs. Zombis.exe')) { throw 'Falta ejecutable del juego' }
+          if (!(Test-Path 'payload/resources/app.asar')) { throw 'Faltan recursos Electron' }
+      - name: Instalar NSIS
+        shell: pwsh
+        run: |
+          choco install nsis -y --no-progress
+      - name: Compilar instalador
+        shell: pwsh
+        run: |
+          $nsis = "${env:ProgramFiles(x86)}\NSIS\makensis.exe"
+          if (!(Test-Path $nsis)) { throw 'NSIS no disponible' }
+          & $nsis 'instaladores/zombis444/instalador.nsi'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          if (!(Test-Path 'Matematicas_vs_Zombis_4.4.4_Instalador.exe')) { throw 'No se generó instalador' }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Instalador-Matematicas-vs-Zombis-4.4.4
+          path: Matematicas_vs_Zombis_4.4.4_Instalador.exe
+          if-no-files-found: error
