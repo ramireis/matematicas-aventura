@@ -1,0 +1,20 @@
+appId: ec.edu.guerraecuaciones
+productName: Guerra de Ecuaciones
+directories:
+  output: dist-guerra
+files:
+  - "guerra-ecuaciones/**/*"
+asar: true
+compression: normal
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+    - target: portable
+      arch: [x64]
+  artifactName: "${productName}-${version}-${arch}.${ext}"
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true

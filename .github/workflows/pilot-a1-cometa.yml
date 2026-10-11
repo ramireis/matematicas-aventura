@@ -1,0 +1,45 @@
+name: Pilot - Generar A1 Cometa (Procedural + NVIDIA opcional)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-ship:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout rama de desarrollo
+        uses: actions/checkout@v4
+        with:
+          ref: guerra-ecuaciones-exe
+
+      - name: Instalar Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender
+
+      - name: Crear carpeta de destino
+        run: mkdir -p guerra-ecuaciones/assets/models/ships
+
+      - name: Generar A1 Cometa procedural
+        run: |
+          blender -b -P guerra-ecuaciones/tools/generate_a1_cometa.py -- guerra-ecuaciones/assets/models/ships/a1_cometa.glb
+
+      - name: Verificar GLB
+        run: |
+          test -s guerra-ecuaciones/assets/models/ships/a1_cometa.glb
+          ls -lh guerra-ecuaciones/assets/models/ships/a1_cometa.glb
+
+      # NVIDIA queda reservado hasta confirmar un endpoint 3D estable.
+      # La clave futura se leerá exclusivamente desde secrets.NVIDIA_API_KEY.
+
+      - name: Guardar A1 en la rama
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add guerra-ecuaciones/assets/models/ships/a1_cometa.glb
+          git diff --cached --quiet && exit 0
+          git commit -m "feat(assets): generar A1 Cometa GLB [pilot]"
+          git push origin HEAD:guerra-ecuaciones-exe
