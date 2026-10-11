@@ -1,3 +1,1 @@
--keepclassmembers class ec.edu.misionmatematica.MainActivity$AndroidBridge {
-    public *;
-}
+-keep class ec.edu.matematicasvszombis.MainActivity { *; }
